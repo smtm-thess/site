@@ -18,7 +18,7 @@ const latest = texts[0];
         <p class="kicker">{agonas.kicker}</p>
         <p class="count" data-count={agonas.countTo}></p>
       </div>
-      <h1 class="mega" id="strike-title">{agonas.title}</h1>
+      <h1 class="mega" id="strike-title" aria-label={agonas.title}>{[...agonas.title].map((ch, i) => <span class="ltr" aria-hidden="true" style={`--i:${i}`}><span>{ch}</span></span>)}</h1>
       <p class="date-line">{agonas.dateLine}</p>
       <div class="facts">
         {agonas.facts.map((f) => <div><span class="lab">{f.label}</span><p>{f.text}</p></div>)}
