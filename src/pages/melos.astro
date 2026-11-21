@@ -2,13 +2,14 @@
 import Base from '../layouts/Base.astro';
 import MailForm from '../components/MailForm.astro';
 import { UNION } from '../consts';
+import { u } from '../lib/url';
 ---
 <Base title="Γίνε μέλος" description="Πώς γράφεσαι στο Σωματείο Μισθωτών Τεχνικών Μακεδονίας. Με σύμβαση ή με «μπλοκάκι», και οι άνεργοι του κλάδου." active="melos">
   <section class="page-head dark">
     <div class="wrap">
       <span class="lab">Γίνε μέλος</span>
       <h1 class="ph">ΔΥΝΑΤΟΣ ΛΑΟΣ ΕΙΝΑΙ Ο <span class="red">ΟΡΓΑΝΩΜΕΝΟΣ</span> ΛΑΟΣ</h1>
-      <p class="lead">Το Σωματείο είναι τα μέλη του. Όσο περισσότεροι γραφόμαστε, τόσο πιο δύσκολα μας περνάνε τα 13ωρα, τα απλήρωτα Σάββατα και τα «μπλοκάκια».</p>
+      <p class="lead">Το Σωματείο είναι τα μέλη του. Όσο περισσότεροι γραφόμαστε, τόσο πιο δυνατοί γινόμαστε για να επιβάλουμε την Κλαδική Σύμβαση που διεκδικούμε: μισθούς για τις σύγχρονες ανάγκες μας, 7ωρο – 5ήμερο – 35ωρο, πληρωμή κάθε ώρας υπερωρίας.</p>
     </div>
   </section>
 
@@ -27,10 +28,9 @@ import { UNION } from '../consts';
   <section class="band band-2" aria-labelledby="how-join">
     <div class="wrap">
       <div class="sec-head"><h2 class="h2" id="how-join">ΠΩΣ ΓΡΑΦΕΣΑΙ</h2></div>
-      <ol class="steps">
+      <ol class="steps steps-2">
         <li><h3>Συμπληρώνεις την αίτηση</h3><p>Κατέβασε την αίτηση ή άφησε τα στοιχεία σου στη φόρμα πιο κάτω και σε παίρνουμε τηλέφωνο.</p></li>
         <li><h3>Την καταθέτεις</h3><p>Στα γραφεία μας στο {UNION.place}, {UNION.street}, ή στο email του Σωματείου.</p></li>
-        <li><h3>Πληρώνεις την εγγραφή</h3><p>Δύο μηνιαίες συνδρομές, δηλαδή 1 €. Η συνδρομή είναι 50 λεπτά τον μήνα.</p></li>
       </ol>
       <div class="btn-row" style="margin-top:30px"><a class="btn btn-ink" href={UNION.applicationDoc} rel="noopener">Η αίτηση εγγραφής (Word)</a></div>
     </div>
@@ -39,12 +39,8 @@ import { UNION } from '../consts';
   <section class="band" aria-labelledby="join-form-h">
     <div class="wrap split">
       <div>
-        <h2 class="h3" id="join-form-h">ΘΕΛΩ ΝΑ ΓΡΑΦΤΩ</h2>
-        <p class="lead" style="margin-top:14px">Άφησε όνομα και τηλέφωνο. Σε παίρνει ένα μέλος του ΔΣ για να τα πείτε και να υπογράψεις την αίτηση.</p>
-        <div class="safety">
-          <span class="lab">Τα στοιχεία σου</span>
-          <p>Εδώ δεν ζητάμε αριθμό ταυτότητας. Αυτός μπαίνει μόνο στην αίτηση που υπογράφεις. Το μήνυμα το βλέπει μόνο το ΔΣ του Σωματείου.</p>
-        </div>
+        <h2 class="h3" id="join-form-h">ΕΧΩ ΑΠΟΡΙΕΣ ΚΑΙ ΘΕΛΩ ΝΑ ΓΡΑΦΤΩ</h2>
+        <p class="lead" style="margin-top:14px">Άφησε όνομα και τηλέφωνο. Σε παίρνει ένα μέλος του ΔΣ να τα πείτε, να λύσεις τις απορίες σου και να υπογράψεις την αίτηση.</p>
       </div>
       <MailForm id="join-form" subject="Θέλω να γραφτώ στο Σωματείο" button="Στείλε">
         <div class="field"><label for="j-name">Ονοματεπώνυμο</label><input id="j-name" type="text" autocomplete="name" data-required="Γράψε το όνομά σου."></div>
@@ -52,6 +48,7 @@ import { UNION } from '../consts';
         <div class="field"><label for="j-spec">Ειδικότητα</label>
           <select id="j-spec"><option>Μηχανικός</option><option>Τεχνολόγος</option><option>Γεωλόγος</option><option>Σχεδιαστής</option><option>Άλλη τεχνική ειδικότητα</option></select></div>
         <div class="field"><label for="j-work">Πού δουλεύεις</label><input id="j-work" type="text" placeholder="Προαιρετικό"></div>
+        <div class="field"><label for="j-ask">Τι θέλεις να ρωτήσεις</label><textarea id="j-ask" rows="3" placeholder="Προαιρετικό"></textarea></div>
       </MailForm>
     </div>
   </section>
@@ -62,7 +59,7 @@ import { UNION } from '../consts';
       <div class="faq">
         <details open><summary>Θα το μάθει ο εργοδότης μου;</summary><p>Όχι από εμάς. Τα στοιχεία των μελών τα κρατά μόνο το Σωματείο και δεν τα δίνουμε σε κανέναν.</p></details>
         <details><summary>Δουλεύω με «μπλοκάκι». Μπορώ να γραφτώ;</summary><p>Ναι. Οι περισσότεροι συνάδελφοι με «μπλοκάκι» δουλεύουν με ωράριο και αφεντικό, σαν μισθωτοί. Παλεύουμε να καλύπτονται κι αυτοί από τη Σύμβαση.</p></details>
-        <details><summary>Είμαι άνεργος. Μπορώ να γραφτώ;</summary><p>Ναι, το καταστατικό δέχεται και τους άνεργους του κλάδου.</p></details>
+        <details><summary>Είμαι άνεργος. Μπορώ να γραφτώ;</summary><p>Ναι, το <a href={u('/katastatiko/#arthro-5')}>καταστατικό</a> δέχεται και τους άνεργους του κλάδου.</p></details>
         <details><summary>Τι σημαίνει να είσαι μέλος;</summary><p>Ψηφίζεις και αποφασίζεις στη Γενική Συνέλευση, το ανώτατο όργανο του Σωματείου. Και μαζί με τους συναδέλφους σου οργανώνεις την απάντηση σε ό,τι γίνεται στη δουλειά.</p></details>
       </div>
     </div>

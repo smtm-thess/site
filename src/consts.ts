@@ -46,6 +46,7 @@ export const NAV = [
   { href: '/anakoinoseis/', label: 'Ανακοινώσεις', key: 'anakoinoseis' },
   { href: '/sse/', label: 'Κλαδική ΣΣΕ', key: 'sse' },
   { href: '/poioi-eimaste/', label: 'Ποιοι είμαστε', key: 'poioi' },
+  { href: '/katastatiko/', label: 'Καταστατικό', key: 'katastatiko' },
   { href: '/grapse/', label: 'Γράψε μας', key: 'grapse' },
 ];
 

@@ -11,7 +11,7 @@ const { id, subject, button, buttonClass = 'btn-red' } = Astro.props;
     <button class:list={['btn', buttonClass]} type="submit">{button}</button>
     <p class="status" role="status" aria-live="polite"></p>
   </div>
-  <p class="form-note">Με το «{button}» ανοίγει το email σου με το μήνυμα έτοιμο. Το στέλνεις εσύ, από το δικό σου email, όχι της δουλειάς.</p>
+  <p class="form-note">Με το «{button}» ανοίγει το email σου με το μήνυμα έτοιμο. Το στέλνεις εσύ, από το δικό σου email.</p>
   <div class="mail-alt" hidden>
     <p><strong>Δεν άνοιξε το email;</strong> Αντίγραψε το μήνυμα και στείλ' το στο <a href={`mailto:${UNION.email}`}>{UNION.email}</a>, ή πάρε μας τηλέφωνο στο {UNION.phones.join(' ή ')}.</p>
     <pre></pre>

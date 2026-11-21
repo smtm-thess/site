@@ -1,0 +1,48 @@
+---
+// Το καταστατικό του Σωματείου, αυτούσιο. Το κείμενο είναι στο src/data/katastatiko.json
+// (από το παλιό site, με διορθωμένα μόνο τα κενά). Αν αλλάξει το καταστατικό, αλλάζει εκεί.
+import Base from '../layouts/Base.astro';
+import { u } from '../lib/url';
+import kat from '../data/katastatiko.json';
+
+type Block =
+  | { t: 'p'; text: string }
+  | { t: 'item'; mark: string; text: string }
+  | { t: 'ul'; items: string[] };
+const articles = kat.articles as { n: number; title: string; toc: string; blocks: Block[] }[];
+---
+<Base title="Καταστατικό" description="Το καταστατικό του Σωματείου Μισθωτών Τεχνικών Μακεδονίας: σκοποί, μέλη, Γενικές Συνελεύσεις, Διοικητικό Συμβούλιο, αρχαιρεσίες." active="katastatiko">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="lab">Το Σωματείο</span>
+      <h1 class="ph">ΚΑΤΑΣΤΑΤΙΚΟ</h1>
+      <p class="lead">Οι σκοποί του Σωματείου, ποιος γράφεται, πώς αποφασίζουμε και πώς εκλέγονται τα όργανα. Ανώτατο όργανο είναι η Γενική Συνέλευση των μελών.</p>
+    </div>
+  </section>
+
+  <div class="wrap kat-grid">
+    <nav class="kat-toc" aria-labelledby="kat-toc-h">
+      <h2 class="lab" id="kat-toc-h">Τα άρθρα</h2>
+      <ol>
+        {articles.map((a) => (
+          <li><a href={`#arthro-${a.n}`}><b>{a.n}</b><span>{a.toc}</span></a></li>
+        ))}
+      </ol>
+      <p class="kat-join"><a class="more" href={u('/melos/')}>Πώς γράφομαι στο Σωματείο</a></p>
+    </nav>
+
+    <article class="a-body kat-body">
+      <p class="kat-title">{kat.heading}<br><span>{kat.sub}</span></p>
+      {articles.map((a) => (
+        <section id={`arthro-${a.n}`} class="kat-art" aria-labelledby={`arthro-${a.n}-h`}>
+          <h2 id={`arthro-${a.n}-h`}><span class="kat-n">Άρθρο {a.n}ο</span>{a.title && <span class="kat-t">{a.title}</span>}</h2>
+          {a.blocks.map((b) =>
+            b.t === 'item' ? <p class="kat-item"><b>{b.mark}</b>{b.text}</p>
+            : b.t === 'ul' ? <ul class="a-bullets">{b.items.map((i) => <li>{i}</li>)}</ul>
+            : <p>{b.text}</p>
+          )}
+        </section>
+      ))}
+    </article>
+  </div>
+</Base>
