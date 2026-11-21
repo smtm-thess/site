@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import MailForm from '../components/MailForm.astro';
-import { UNION } from '../consts';
+import { UNION, YEARS_WITHOUT_SSE } from '../consts';
 import { u } from '../lib/url';
 ---
 <Base title="Γίνε μέλος" description="Πώς γράφεσαι στο Σωματείο Μισθωτών Τεχνικών Μακεδονίας. Με σύμβαση ή με «μπλοκάκι», και οι άνεργοι του κλάδου." active="melos">
@@ -13,7 +13,22 @@ import { u } from '../lib/url';
     </div>
   </section>
 
-  <section class="band" aria-labelledby="who-can">
+  <section class="band" aria-labelledby="what-means">
+    <div class="wrap split">
+      <div>
+        <h2 class="h2" id="what-means">ΤΙ ΣΗΜΑΙΝΕΙ ΝΑ ΕΙΣΑΙ ΜΕΛΟΣ</h2>
+      </div>
+      <div class="prose">
+        <p style="margin-top:0"><strong>Να γραφτείς στο Σωματείο δεν είναι μια τυπική υπογραφή. Είναι στάση.</strong> Είναι να αναγνωρίζεις ότι η δύναμή σου δεν βρίσκεται στο ατομικό παζάρι με τον εργοδότη, αλλά μαζί με τους πολλούς που ζουν τα ίδια με σένα.</p>
+        <p>Η εργοδοσία μάς θέλει τον καθένα μόνο του: με ατομική σύμβαση ή «μπλοκάκι», να διαπραγματεύεται μόνος τον μισθό του και να καταπίνει τις απλήρωτες υπερωρίες. Έτσι αρνείται εδώ και {YEARS_WITHOUT_SSE} χρόνια να υπογράψει Κλαδική Σύμβαση. <strong>Οργανωμένοι, γινόμαστε η δύναμη που θα την επιβάλει.</strong></p>
+        <p>Ως μέλος <strong>αποφασίζεις</strong> στη Γενική Συνέλευση για τα αιτήματα και τη δράση μας. <strong>Οργανώνεις</strong> με τους συναδέλφους σου την απάντηση σε ό,τι γίνεται στο γραφείο και στο εργοτάξιο. <strong>Παλεύεις</strong> στις απεργίες και στους αγώνες του κλάδου, μαζί με το Συνδικάτο Οικοδόμων και τα ταξικά σωματεία της πόλης.</p>
+        <p><strong>Διαλέγεις πλευρά: τη δική μας.</strong> Εμείς που σχεδιάζουμε και χτίζουμε τα έργα, εμείς που παράγουμε τον πλούτο, διεκδικούμε να ζούμε από τη δουλειά μας, με δικαιώματα.</p>
+        <p><a class="more" href={u('/katastatiko/#arthro-6')}>Τα δικαιώματα και οι υποχρεώσεις των μελών στο καταστατικό</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-2" aria-labelledby="who-can">
     <div class="wrap split">
       <div>
         <h2 class="h2" id="who-can">ΠΟΙΟΣ ΓΡΑΦΕΤΑΙ</h2>
@@ -25,7 +40,7 @@ import { u } from '../lib/url';
     </div>
   </section>
 
-  <section class="band band-2" aria-labelledby="how-join">
+  <section class="band" aria-labelledby="how-join">
     <div class="wrap">
       <div class="sec-head"><h2 class="h2" id="how-join">ΠΩΣ ΓΡΑΦΕΣΑΙ</h2></div>
       <ol class="steps steps-2">
@@ -36,7 +51,7 @@ import { u } from '../lib/url';
     </div>
   </section>
 
-  <section class="band" aria-labelledby="join-form-h">
+  <section class="band band-2" aria-labelledby="join-form-h">
     <div class="wrap split">
       <div>
         <h2 class="h3" id="join-form-h">ΕΧΩ ΑΠΟΡΙΕΣ ΚΑΙ ΘΕΛΩ ΝΑ ΓΡΑΦΤΩ</h2>
@@ -53,14 +68,13 @@ import { u } from '../lib/url';
     </div>
   </section>
 
-  <section class="band band-2" aria-labelledby="faq-h">
+  <section class="band" aria-labelledby="faq-h">
     <div class="wrap split">
       <div><h2 class="h2" id="faq-h">ΣΥΧΝΕΣ ΕΡΩΤΗΣΕΙΣ</h2></div>
       <div class="faq">
         <details open><summary>Θα το μάθει ο εργοδότης μου;</summary><p>Όχι από εμάς. Τα στοιχεία των μελών τα κρατά μόνο το Σωματείο και δεν τα δίνουμε σε κανέναν.</p></details>
         <details><summary>Δουλεύω με «μπλοκάκι». Μπορώ να γραφτώ;</summary><p>Ναι. Οι περισσότεροι συνάδελφοι με «μπλοκάκι» δουλεύουν με ωράριο και αφεντικό, σαν μισθωτοί. Παλεύουμε να καλύπτονται κι αυτοί από τη Σύμβαση.</p></details>
         <details><summary>Είμαι άνεργος. Μπορώ να γραφτώ;</summary><p>Ναι, το <a href={u('/katastatiko/#arthro-5')}>καταστατικό</a> δέχεται και τους άνεργους του κλάδου.</p></details>
-        <details><summary>Τι σημαίνει να είσαι μέλος;</summary><p>Ψηφίζεις και αποφασίζεις στη Γενική Συνέλευση, το ανώτατο όργανο του Σωματείου. Και μαζί με τους συναδέλφους σου οργανώνεις την απάντηση σε ό,τι γίνεται στη δουλειά.</p></details>
       </div>
     </div>
   </section>
