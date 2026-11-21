@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { Picture, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import { allTexts, ogHref, type Text } from '../../lib/texts';
 import { u, abs } from '../../lib/url';
@@ -18,8 +19,13 @@ const shareText = `${d.title} ${url}`;
 const enc = encodeURIComponent;
 const minutes = readingMinutes(t.body);
 const description = d.summary ?? d.sub.join(' · ');
+// Φωτογραφίες: η πρώτη πάνω από το κείμενο, οι άλλες από κάτω. Κάθε μία ανοίγει
+// σε μεγάλο μέγεθος. Η πρώτη γίνεται και η εικόνα κοινοποίησης.
+const photos = d.photos;
+const big = await Promise.all(photos.map((p) => getImage({ src: p.src, width: Math.min(2000, p.src.width), format: 'jpg' })));
+const share = photos[0] && (await getImage({ src: photos[0].src, width: 1200, height: 630, fit: 'cover', format: 'jpg' }));
 ---
-<Base title={d.title} description={description} image={ogHref(t)} type="article" active="anakoinoseis" published={d.date}>
+<Base title={d.title} description={description} image={share ? share.src : ogHref(t)} type="article" active="anakoinoseis" published={d.date}>
   <article>
     <header class="art-head">
       <div class="wrap">
@@ -27,6 +33,9 @@ const description = d.summary ?? d.sub.join(' · ');
         <h1 class="a-title">{d.title}</h1>
         {d.sub.length > 0 && <p class="a-sub">{d.sub.map((s) => <span>{s}</span>)}</p>}
         <p class="a-meta"><span>{longDate(d.date)}</span><span>{d.kind}</span><span>{minutes} {minutes === 1 ? 'λεπτό' : 'λεπτά'} ανάγνωση</span></p>
+        {photos[0] && (
+          <a class="rep-cover" href={big[0].src}><Picture src={photos[0].src} alt={photos[0].alt} widths={[640, 1000, 1400, 2000]} sizes="(max-width: 1280px) calc(100vw - 32px), 1180px" formats={['avif', 'webp']} loading="eager" /></a>
+        )}
       </div>
     </header>
     <div class="wrap art-grid">
@@ -54,6 +63,16 @@ const description = d.summary ?? d.sub.join(' · ');
         </div>
       </aside>
     </div>
+    {photos.length > 1 && (
+      <section class="wrap rep-photos" aria-labelledby="photos-h">
+        <h2 class="lab" id="photos-h">Φωτογραφίες</h2>
+        <div class="rep-grid">
+          {photos.slice(1).map((p, i) => (
+            <a href={big[i + 1].src}><Picture src={p.src} alt={p.alt} widths={[400, 700, 1000, 1400]} sizes="(max-width: 620px) calc(100vw - 32px), (max-width: 1280px) 50vw, 580px" formats={['avif', 'webp']} /></a>
+          ))}
+        </div>
+      </section>
+    )}
     {d.video && (
       <section class="video-band dark" id="video" aria-labelledby="video-h">
         <div class="wrap">

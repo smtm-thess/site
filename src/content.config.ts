@@ -6,7 +6,7 @@ import { z } from 'astro/zod';
 // με όνομα ΕΕΕΕ-ΜΜ-ΗΗ-λέξεις-με-παύλες.md. Το όνομα γίνεται και η διεύθυνση.
 const anakoinoseis = defineCollection({
   loader: glob({ base: './src/content/anakoinoseis', pattern: '**/*.md' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     sub: z.array(z.string()).default([]),
     date: z.coerce.date(),
@@ -22,6 +22,9 @@ const anakoinoseis = defineCollection({
       .object({ src: z.string(), poster: z.string(), length: z.string().optional() })
       .optional(),
     og: z.object({ title: z.string().optional(), line: z.string().optional() }).optional(),
+    // Φωτογραφίες (π.χ. ρεπορτάζ από απεργία): αρχεία στο foto/<όνομα κειμένου>/,
+    // περασμένα πρώτα από το tools/foto.py. Η πρώτη μπαίνει και στην αρχική.
+    photos: z.array(z.object({ src: image(), alt: z.string() })).default([]),
     // Παλιά κείμενα που μένουν στο παλιό site: η λίστα δείχνει εκεί
     external: z.string().url().optional(),
     draft: z.boolean().default(false),

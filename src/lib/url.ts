@@ -4,6 +4,7 @@ const BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
 
 export function u(path = '/'): string {
   if (/^([a-z]+:|#|\/\/)/i.test(path)) return path;
+  if (BASE && (path === BASE || path.startsWith(BASE + '/'))) return path; // ήδη με τον υποφάκελο (π.χ. εικόνες)
   return BASE + (path.startsWith('/') ? path : '/' + path);
 }
 

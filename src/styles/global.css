@@ -299,6 +299,34 @@ form{display:grid;gap:22px;align-content:start}
 .lead-block h1 a{text-decoration:none}
 .lead-block p{font-family:var(--display);font-weight:800;font-size:clamp(20px,2.4vw,29px);line-height:1.1;max-width:40ch}
 .lead-block .btn-row{margin-top:30px}
+/* η κορυφή με φωτογραφία (π.χ. το ρεπορτάζ μιας απεργίας) */
+.lead-block.has-photo .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:28px 52px;align-items:center}
+.lead-block.has-photo h1{font-size:clamp(46px,6vw,90px)}
+.lead-photo{display:block}
+.lead-photo img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:var(--red-deep)}
+/* το μόνιμο μπλοκ της Σύμβασης, όταν δεν υπάρχει πρόσφατο κείμενο */
+.sse-mega{margin:.1em 0 0 -.03em;font-family:var(--display);font-weight:900;line-height:.8;letter-spacing:-.005em}
+.sse-mega .ln{display:block;clip-path:inset(-.35em -.2em 0 -.2em)}
+.sse-mega .ln > span{display:inline-block}
+.sse-mega .ln:first-child{font-size:24.8cqi}
+.sse-mega .ln + .ln{font-size:16.6cqi;margin-top:.06em}
+.sse-hero .date-line{font-size:7.3cqi;margin-top:.5em}
+.sse-facts{grid-template-columns:1.3fr 1fr 1fr}
+.hero-wages{list-style:none;margin:0;padding:0}
+.hero-wages li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;padding-block:6px;border-bottom:1px solid rgba(58,18,14,.38)}
+.hero-wages li:first-child{padding-top:2px}
+.hero-wages b{font-family:var(--display);font-weight:900;font-size:clamp(26px,2.8vw,34px);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hero-wages span{font-weight:700;font-size:15px;line-height:1.3}
+.facts .hero-step{font-family:var(--text);font-weight:700;font-size:15.5px;line-height:1.35;margin-top:8px}
+/* φωτογραφίες ρεπορτάζ */
+.rep-cover{display:block;margin-top:30px}
+.rep-cover img,.rep-grid img{display:block;width:100%;height:auto}
+.rep-cover img{max-height:78vh;object-fit:cover}
+.rep-photos{padding-block:8px 84px}
+.rep-photos > .lab{display:block;padding-bottom:12px;margin-bottom:22px;border-bottom:1.5px solid var(--ink)}
+.rep-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.rep-grid img{aspect-ratio:4/3;object-fit:cover;background:var(--paper-2)}
+.rep-grid a{display:block}
 .viber-row{margin-top:10px}
 /* καταστατικό */
 .kat-grid{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);gap:40px 72px;padding-block:40px 90px;align-items:start}
@@ -322,6 +350,7 @@ form{display:grid;gap:22px;align-content:start}
 @media (prefers-reduced-motion:no-preference){
   .mega .ltr > span{animation:ltr-rise .55s cubic-bezier(.2,.85,.25,1) both;animation-delay:calc(80ms + var(--i) * 45ms)}
   .strike .date-line{animation:fade-up .45s ease-out .5s both}
+  .sse-mega .ln > span{animation:ltr-rise .6s cubic-bezier(.2,.85,.25,1) both;animation-delay:calc(80ms + var(--i) * 110ms)}
 }
 @keyframes ltr-rise{from{transform:translateY(110%)}to{transform:none}}
 @keyframes fade-up{from{opacity:0;transform:translateY(.2em)}to{opacity:1;transform:none}}
@@ -345,6 +374,10 @@ form{display:grid;gap:22px;align-content:start}
   .facts > div:last-child{grid-column:1 / -1}
   .sse-grid,.split,.join-band .wrap,.video-band .wrap{grid-template-columns:minmax(0,1fr)}
   .vid{margin-inline:auto;max-height:78vh;width:auto}
+  .lead-block.has-photo .wrap{grid-template-columns:minmax(0,1fr)}
+  .lead-photo{order:-1}
+  .sse-facts > div:first-child{grid-column:1 / -1}
+  .sse-facts > div:last-child{grid-column:auto}
   .steps,.beliefs,.contact-grid{grid-template-columns:minmax(0,1fr)}
   .foot .wrap{grid-template-columns:1fr 1fr}
   .foot .wrap > .brand{grid-column:1 / -1}
@@ -367,6 +400,7 @@ form{display:grid;gap:22px;align-content:start}
   .strike .wrap{padding-block:26px 34px}
   .facts{grid-template-columns:1fr;gap:16px}
   .facts > div:last-child{grid-column:auto}
+  .rep-grid{grid-template-columns:minmax(0,1fr)}
   .item,.feed.compact .item{grid-template-columns:minmax(0,1fr);gap:8px}
   .item time{flex-direction:row;align-items:baseline;gap:10px}
   .item time b{font-size:34px}

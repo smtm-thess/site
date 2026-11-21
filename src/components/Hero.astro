@@ -1,17 +1,21 @@
 ---
-// Το κόκκινο μπλοκ της αρχικής: ο αγώνας της στιγμής ή, αν έχει περάσει,
-// το νεότερο κείμενο του Σωματείου.
+// Η κορυφή της αρχικής. Τι δείχνει και πότε: src/lib/hero.ts
+// (ο αγώνας της στιγμής, το νεότερο κείμενο ή το μόνιμο μπλοκ της Σύμβασης).
+import { Picture } from 'astro:assets';
 import { agonas } from '../data/agonas';
-import { todayAthens, longDate } from '../lib/dates';
+import { longDate } from '../lib/dates';
 import { u } from '../lib/url';
 import { allTexts, textHref } from '../lib/texts';
+import type { Hero } from '../lib/hero';
+import { WAGES, YEARS_WITHOUT_SSE } from '../consts';
 
-const texts = await allTexts();
-const active = todayAthens() <= agonas.until;
-const text = texts.find((t) => t.id === agonas.text);
-const latest = texts[0];
+interface Props { h: Hero }
+const { h } = Astro.props;
+const call = (await allTexts()).find((t) => t.id === agonas.text);
+const t = h.mode === 'text' ? h.text : undefined;
+const photo = t?.data.photos[0];
 ---
-{active ? (
+{h.mode === 'agonas' ? (
   <section class="strike" aria-labelledby="strike-title">
     <div class="wrap">
       <div class="strike-top">
@@ -23,25 +27,59 @@ const latest = texts[0];
       <div class="facts">
         {agonas.facts.map((f) => <div><span class="lab">{f.label}</span><p>{f.text}</p></div>)}
       </div>
-      {text && (
+      {call && (
         <div class="btn-row">
-          <a class="btn btn-paper" href={textHref(text)}>Διάβασε την ανακοίνωση</a>
-          {text.data.video && <a class="btn btn-line" href={`${textHref(text)}#video`}>Το βίντεο</a>}
-          {text.data.pdf && <a class="btn btn-line" href={u(text.data.pdf)} download>PDF για μοίρασμα</a>}
+          <a class="btn btn-paper" href={textHref(call)}>Διάβασε την ανακοίνωση</a>
+          {call.data.video && <a class="btn btn-line" href={`${textHref(call)}#video`}>Το βίντεο</a>}
+          {call.data.pdf && <a class="btn btn-line" href={u(call.data.pdf)} download>PDF για μοίρασμα</a>}
         </div>
       )}
     </div>
   </section>
-) : latest ? (
-  <section class="lead-block" aria-labelledby="lead-title">
+) : t ? (
+  <section class:list={['lead-block', { 'has-photo': photo }]} aria-labelledby="lead-title">
     <div class="wrap">
-      <span class="lab">{latest.data.kind} · {longDate(latest.data.date)}</span>
-      <h1 id="lead-title"><a href={textHref(latest)}>{latest.data.title}</a></h1>
-      {latest.data.summary && <p>{latest.data.summary}</p>}
+      <div class="lead-text">
+        <span class="lab">{t.data.kind} · {longDate(t.data.date)}</span>
+        <h1 id="lead-title"><a href={textHref(t)}>{t.data.title}</a></h1>
+        {t.data.summary && <p>{t.data.summary}</p>}
+        <div class="btn-row">
+          <a class="btn btn-paper" href={textHref(t)}>{t.data.photos.length > 1 ? 'Το κείμενο και οι φωτογραφίες' : 'Διάβασε το κείμενο'}</a>
+          {t.data.pdf && <a class="btn btn-line" href={u(t.data.pdf)} download>PDF</a>}
+        </div>
+      </div>
+      {photo && (
+        <a class="lead-photo" href={textHref(t)} tabindex="-1" aria-hidden="true">
+          <Picture src={photo.src} alt="" widths={[480, 760, 1100, 1500]} sizes="(max-width: 900px) calc(100vw - 32px), 560px" formats={['avif', 'webp']} loading="eager" />
+        </a>
+      )}
+    </div>
+  </section>
+) : (
+  <section class="strike sse-hero" aria-labelledby="sse-title">
+    <div class="wrap">
+      <div class="strike-top">
+        <p class="kicker">Κλαδική Συλλογική Σύμβαση</p>
+        <p class="count">Από το 2012</p>
+      </div>
+      <h1 class="sse-mega" id="sse-title" aria-label={`${YEARS_WITHOUT_SSE} χρόνια χωρίς Σύμβαση`}>
+        <span class="ln" aria-hidden="true" style="--i:0"><span>{YEARS_WITHOUT_SSE} ΧΡΟΝΙΑ</span></span>
+        <span class="ln" aria-hidden="true" style="--i:1"><span>ΧΩΡΙΣ ΣΥΜΒΑΣΗ</span></span>
+      </h1>
+      <p class="date-line">ΘΑ ΤΗΝ ΕΠΙΒΑΛΟΥΜΕ ΟΡΓΑΝΩΜΕΝΟΙ</p>
+      <div class="facts sse-facts">
+        <div>
+          <span class="lab">Πρώτος μισθός, καθαρά</span>
+          <ul class="hero-wages">{WAGES.map((w) => <li><b>{w.amount}&nbsp;€</b><span>{w.short}</span></li>)}</ul>
+          <p class="hero-step">και προσαύξηση κάθε δύο χρόνια</p>
+        </div>
+        <div><span class="lab">Χρόνος δουλειάς</span><p>7ωρο – 5ήμερο – 35ωρο</p><p class="hero-step">Πληρωμή κάθε ώρας υπερωρίας</p></div>
+        <div><span class="lab">Για όλους</span><p>Και για όσους δουλεύουν με «μπλοκάκι»</p><p class="hero-step">Κατάργηση του ΔΠΥ</p></div>
+      </div>
       <div class="btn-row">
-        <a class="btn btn-paper" href={textHref(latest)}>Διάβασε το κείμενο</a>
-        {latest.data.pdf && <a class="btn btn-line" href={u(latest.data.pdf)} download>PDF</a>}
+        <a class="btn btn-paper" href={u('/melos/')}>Γίνε μέλος</a>
+        <a class="btn btn-line" href={u('/sse/')}>Τι διεκδικούμε</a>
       </div>
     </div>
   </section>
-) : null}
+)}

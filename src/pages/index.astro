@@ -5,12 +5,15 @@ import FeedItem from '../components/FeedItem.astro';
 import Wages from '../components/Wages.astro';
 import { u } from '../lib/url';
 import { allTexts } from '../lib/texts';
+import { hero } from '../lib/hero';
 import { YEARS_WITHOUT_SSE, UNION } from '../consts';
 
-const texts = (await allTexts()).slice(0, 4);
+const h = await hero();
+// Το κείμενο που είναι ήδη στην κορυφή δεν ξαναμπαίνει από κάτω
+const texts = (await allTexts()).filter((t) => h.mode !== 'text' || t.id !== h.text.id).slice(0, 4);
 ---
 <Base>
-  <Hero />
+  <Hero h={h} />
 
   <section class="band" aria-labelledby="home-ann">
     <div class="wrap">
@@ -25,6 +28,7 @@ const texts = (await allTexts()).slice(0, 4);
     </div>
   </section>
 
+  {h.mode !== 'sse' && (
   <section class="band band-2" aria-labelledby="home-sse">
     <div class="wrap">
       <div class="sec-head">
@@ -49,6 +53,7 @@ const texts = (await allTexts()).slice(0, 4);
       </div>
     </div>
   </section>
+  )}
 
   <section class="join-band dark" aria-labelledby="home-join">
     <div class="wrap">
