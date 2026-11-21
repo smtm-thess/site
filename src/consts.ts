@@ -58,3 +58,8 @@ export const CATS = {
   drasi: 'Δράσεις',
 } as const;
 export type Cat = keyof typeof CATS;
+
+// Μέτρηση επισκέψεων με το GoatCounter (χωρίς cookies, μόνο σύνολα).
+// Ο κωδικός του λογαριασμού: οι μετρήσεις πάνε στο https://<κωδικός>.goatcounter.com
+// Κενό = καμία μέτρηση.
+export const GOATCOUNTER = 'smtm';
