@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { u } from '../lib/url';
+import { UNION } from '../consts';
+---
+<Base title="Δεν βρέθηκε">
+  <section class="page-head err-page">
+    <div class="wrap">
+      <span class="lab">Σφάλμα 404</span>
+      <h1 class="ph">ΑΥΤΗ Η ΣΕΛΙΔΑ ΔΕΝ ΥΠΑΡΧΕΙ</h1>
+      <p class="lead">Ίσως ήταν στο παλιό site. Δοκίμασε τις <a href={u('/anakoinoseis/')}>ανακοινώσεις</a>, την <a href={u('/')}>αρχική</a> ή το <a href={UNION.oldSite} rel="noopener">παλιό site</a>.</p>
+    </div>
+  </section>
+</Base>

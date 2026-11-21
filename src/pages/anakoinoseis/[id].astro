@@ -1,0 +1,57 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { allTexts, ogHref, type Text } from '../../lib/texts';
+import { u, abs } from '../../lib/url';
+import { longDate, readingMinutes } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  const texts = (await allTexts()).filter((t) => !t.data.external);
+  return texts.map((t) => ({ params: { id: t.id }, props: { t } }));
+}
+
+const { t } = Astro.props as { t: Text };
+const { Content } = await render(t);
+const d = t.data;
+const url = abs(`/anakoinoseis/${t.id}/`, Astro.site);
+const shareText = `${d.title} ${url}`;
+const enc = encodeURIComponent;
+const minutes = readingMinutes(t.body);
+const description = d.summary ?? d.sub.join(' · ');
+---
+<Base title={d.title} description={description} image={ogHref(t)} type="article" active="anakoinoseis" published={d.date}>
+  <article>
+    <header class="art-head">
+      <div class="wrap">
+        <nav class="crumbs" aria-label="Διαδρομή"><a href={u('/anakoinoseis/')}>Ανακοινώσεις</a><span>/</span><span>{d.date.getUTCFullYear()}</span></nav>
+        <h1 class="a-title">{d.title}</h1>
+        {d.sub.length > 0 && <p class="a-sub">{d.sub.map((s) => <span>{s}</span>)}</p>}
+        <p class="a-meta"><span>{longDate(d.date)}</span><span>{d.kind}</span><span>{minutes} {minutes === 1 ? 'λεπτό' : 'λεπτά'} ανάγνωση</span></p>
+      </div>
+    </header>
+    <div class="wrap art-grid">
+      <div class="a-body">
+        <Content />
+      </div>
+      <aside class="art-side" aria-label="Μοίρασέ το">
+        {d.event && (
+          <div class="event-card">
+            <span class="lab">{d.event.label}</span>
+            <b>{d.event.when}</b>
+            <p>{d.event.where}</p>
+          </div>
+        )}
+        <div class="side-box">
+          <span class="lab">Μοίρασέ το</span>
+          {d.pdf && <a class="btn btn-ink" href={u(d.pdf)} download>Κατέβασε το PDF</a>}
+          <div class="share">
+            <a class="chip" href={`viber://forward?text=${enc(shareText)}`}>VIBER</a>
+            <a class="chip" href={`https://wa.me/?text=${enc(shareText)}`} rel="noopener" target="_blank">WHATSAPP</a>
+            <a class="chip" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} rel="noopener" target="_blank">FACEBOOK</a>
+            <button class="chip" type="button" data-copy={url} data-copied="Ο σύνδεσμος αντιγράφηκε">ΑΝΤΙΓΡΑΦΗ</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </article>
+</Base>

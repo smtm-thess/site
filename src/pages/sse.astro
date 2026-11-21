@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import Wages from '../components/Wages.astro';
+import { u } from '../lib/url';
+import { allTexts, textHref } from '../lib/texts';
+import { agonas } from '../data/agonas';
+import { UNION, YEARS_WITHOUT_SSE } from '../consts';
+import { todayAthens } from '../lib/dates';
+
+const beforeStrike = todayAthens() <= '2026-11-25';
+
+const strike = (await allTexts()).find((t) => t.id === agonas.text);
+---
+<Base title="Κλαδική Συλλογική Σύμβαση" description={`${YEARS_WITHOUT_SSE} χρόνια χωρίς Κλαδική Συλλογική Σύμβαση. Τι διεκδικούμε οι μηχανικοί και οι τεχνικοί, και πώς θα την κερδίσουμε.`} active="sse">
+  <section class="page-head tint">
+    <div class="wrap">
+      <span class="lab">Κλαδική Συλλογική Σύμβαση</span>
+      <h1 class="ph"><span class="red">{YEARS_WITHOUT_SSE}</span> ΧΡΟΝΙΑ ΧΩΡΙΣ ΣΥΜΒΑΣΗ</h1>
+      <p class="lead">Εδώ και {YEARS_WITHOUT_SSE} χρόνια οι μηχανικοί και οι τεχνικοί του ιδιωτικού τομέα δουλεύουμε χωρίς Κλαδική Συλλογική Σύμβαση. Δεν είναι παράλειψη. Είναι επιλογή των εργοδοτών και των κυβερνήσεών τους, γιατί φθηνότεροι μηχανικοί σημαίνει μεγαλύτερα κέρδη για τους ομίλους.</p>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="sse-want">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="h2" id="sse-want">ΤΙ ΔΙΕΚΔΙΚΟΥΜΕ</h2></div>
+      <div class="sse-grid">
+        <Wages label="Πρώτος μισθός, καθαρά" />
+        <ul class="demands" style="margin-top:0">
+          <li>Σύμβαση για όλους<small>Και για όσους δουλεύουν με «μπλοκάκι»: κατάργηση του ΔΠΥ.</small></li>
+          <li>7ωρο – 5ήμερο – 35ωρο<small>Σταθερό ωράριο. Όχι στο 13ωρο, στα Σάββατα και στις Κυριακές στα εργοτάξια.</small></li>
+          <li>Πληρωμή κάθε ώρας υπερωρίας</li>
+          <li>Άδειες, επιδόματα, προστασία της μητρότητας<small>Και επίδομα για μεταπτυχιακούς τίτλους.</small></li>
+          <li>Υγεία και ασφάλεια<small>Απινιδωτής σε κάθε εργοτάξιο. Οι θάνατοι στη δουλειά είναι εγκλήματα, όχι ατυχήματα.</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-2" aria-labelledby="sse-why">
+    <div class="wrap split">
+      <div>
+        <span class="lab red">Γιατί μας την αρνούνται</span>
+        <h2 class="quote-big" id="sse-why" style="margin-top:14px">Η άρνηση του ΣΤΕΑΤ δεν είναι πείσμα. Είναι <em>στρατηγική επιλογή του κεφαλαίου.</em></h2>
+      </div>
+      <div class="prose">
+        <p>Ο ΣΤΕΑΤ, ο σύνδεσμος των μεγάλων τεχνικών εταιρειών, αρνείται να υπογράψει Κλαδική Σύμβαση. Για να «τρέξουν» τα έργα τους, θέλουν μηχανικούς και τεχνικούς <strong>φτηνούς, ευέλικτους και διαθέσιμους όλο το 24ωρο</strong>, με το 13ωρο που νομοθέτησε η κυβέρνηση.</p>
+        <p>Γι' αυτό η πάλη για τη Σύμβαση δεν είναι τεχνική υπόθεση. <strong>Είναι σύγκρουση με τη στρατηγική του κεφαλαίου, και θα την πάμε μέχρι τέλους.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="sse-how">
+    <div class="wrap split">
+      <div>
+        <h2 class="h2" id="sse-how">ΠΩΣ ΘΑ ΤΗΝ ΚΕΡΔΙΣΟΥΜΕ</h2>
+      </div>
+      <div class="prose">
+        <p style="margin-top:0">Καμιά σύμβαση δεν υπογράφτηκε επειδή τη ζητήσαμε ευγενικά. <strong>Στις 24 Ιούνη απεργήσαμε κλαδικά για τη Σύμβαση. Στις 25 Νοέμβρη {beforeStrike ? 'απεργούμε' : 'απεργήσαμε'} ξανά.</strong></p>
+        <p>Πίεση στην εργοδοσία δεν ασκούν οι συμβολικές κινήσεις. <strong>Την ασκεί το γραφείο που αδειάζει και το εργοτάξιο που σταματά.</strong> Γι' αυτό οργανωνόμαστε σε κάθε χώρο δουλειάς.</p>
+        <div class="btn-row" style="margin-top:26px">
+          <a class="btn btn-red" href={u('/melos/')}>Γίνε μέλος</a>
+          {strike && <a class="btn btn-ghost" href={textHref(strike)}>Η ανακοίνωση της απεργίας</a>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-2" aria-labelledby="sse-draft">
+    <div class="wrap split">
+      <div>
+        <span class="lab red">Το κείμενο</span>
+        <h2 class="h3" id="sse-draft" style="margin-top:12px">ΤΟ ΣΧΕΔΙΟ ΣΥΛΛΟΓΙΚΗΣ ΣΥΜΒΑΣΗΣ ΤΟΥ ΣΩΜΑΤΕΙΟΥ</h2>
+      </div>
+      <div class="prose">
+        <p style="margin-top:0">Το ψήφισε ομόφωνα η Γενική Συνέλευση στις 4 Ιουνίου 2022. Είναι η πρότασή μας για το τι πρέπει να γράφει μια Κλαδική Σύμβαση για τον κλάδο μας.</p>
+        <div class="btn-row" style="margin-top:22px"><a class="btn btn-ink" href={UNION.sseDraftPdf} rel="noopener">Το σχέδιο ΣΣΕ σε PDF</a></div>
+      </div>
+    </div>
+  </section>
+</Base>

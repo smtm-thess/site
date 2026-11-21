@@ -1,0 +1,11 @@
+---
+// Ο πρώτος μισθός που διεκδικούμε
+import { WAGES, WAGE_STEP } from '../consts';
+interface Props { label?: string }
+const { label = 'Διεκδικούμε πρώτο μισθό, καθαρά' } = Astro.props;
+---
+<div class="sheet">
+  <span class="lab">{label}</span>
+  {WAGES.map((w) => <div class="wage"><b>{w.amount}&nbsp;€</b><span>{w.who}</span></div>)}
+  <p class="step-note">{WAGE_STEP}</p>
+</div>

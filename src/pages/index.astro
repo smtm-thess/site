@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import FeedItem from '../components/FeedItem.astro';
+import Wages from '../components/Wages.astro';
+import { u } from '../lib/url';
+import { allTexts } from '../lib/texts';
+import { YEARS_WITHOUT_SSE, UNION } from '../consts';
+
+const texts = (await allTexts()).slice(0, 4);
+---
+<Base>
+  <Hero />
+
+  <section class="band" aria-labelledby="home-ann">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="home-ann">ΑΝΑΚΟΙΝΩΣΕΙΣ</h2>
+        <a class="more" href={u('/anakoinoseis/')}>Όλα τα κείμενα</a>
+      </div>
+      <ol class="feed">
+        {texts.map((t, i) => <FeedItem t={t} lead={i === 0} />)}
+      </ol>
+      <p class="form-note" style="margin-top:18px">Τα κείμενα από το 2012 ως το 2025 είναι ακόμα στο <a href={UNION.oldSite} rel="noopener">παλιό site</a>.</p>
+    </div>
+  </section>
+
+  <section class="band band-2" aria-labelledby="home-sse">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="h2" id="home-sse">ΚΛΑΔΙΚΗ ΣΥΛΛΟΓΙΚΗ ΣΥΜΒΑΣΗ</h2>
+        <a class="more" href={u('/sse/')}>Τι διεκδικούμε και γιατί</a>
+      </div>
+      <div class="sse-grid">
+        <div class="prose">
+          <div class="years"><b>{YEARS_WITHOUT_SSE}</b><span>ΧΡΟΝΙΑ<br>ΧΩΡΙΣ<br>ΣΥΜΒΑΣΗ</span></div>
+          <p>Σχεδιάζουμε, επιβλέπουμε και χτίζουμε τα έργα που γεμίζουν τους ισολογισμούς των ομίλων. <strong>Εμείς παράγουμε τον πλούτο.</strong> Κι όμως δουλεύουμε με ατομικές συμβάσεις, απλήρωτες υπερωρίες και «μπλοκάκια», γιατί οι εργοδοτικές ενώσεις αρνούνται να υπογράψουν.</p>
+          <p><strong>Η Κλαδική Σύμβαση σημαίνει ίδιους όρους για όλους μας, γραμμένους και δεσμευτικούς.</strong> Δεν θα μας τη χαρίσει κανείς. Θα την κερδίσουμε οργανωμένοι, σε κάθε γραφείο και κάθε εργοτάξιο.</p>
+        </div>
+        <div>
+          <Wages />
+          <ul class="demands">
+            <li>7ωρο – 5ήμερο – 35ωρο</li>
+            <li>Πληρωμή κάθε ώρας υπερωρίας</li>
+            <li>Κατάργηση του ΔΠΥ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="join-band dark" aria-labelledby="home-join">
+    <div class="wrap">
+      <h2 id="home-join">ΔΥΝΑΤΟΣ ΛΑΟΣ ΕΙΝΑΙ Ο <em>ΟΡΓΑΝΩΜΕΝΟΣ</em> ΛΑΟΣ</h2>
+      <div>
+        <ul class="who"><li>ΜΗΧΑΝΙΚΟΙ</li><li>ΤΕΧΝΟΛΟΓΟΙ</li><li>ΓΕΩΛΟΓΟΙ</li><li>ΣΧΕΔΙΑΣΤΕΣ</li></ul>
+        <p>Το Σωματείο είναι όσοι δουλεύουμε σε γραφεία μελετών, εργοτάξια και βιομηχανίες της Μακεδονίας, με σύμβαση ή με «μπλοκάκι». Όσο περισσότεροι γραφόμαστε, τόσο πιο δύσκολα μας περνάνε τα 13ωρα και τα Σάββατα.</p>
+        <a class="btn btn-red" href={u('/melos/')}>Πώς γράφομαι στο Σωματείο</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="home-report">
+    <div class="wrap split">
+      <div>
+        <h2 class="h2" id="home-report">ΤΙ ΓΙΝΕΤΑΙ ΣΤΗ ΔΟΥΛΕΙΑ ΣΟΥ;</h2>
+        <p class="lead" style="margin-top:20px">Γράψε μας τι συμβαίνει στο γραφείο ή στο εργοτάξιο. Το Σωματείο θα σε βρει, και μαζί με τους συναδέλφους σου θα οργανώσουμε την απάντηση.</p>
+        <div class="btn-row" style="margin-top:26px"><a class="btn btn-ink" href={u('/grapse/')}>Γράψε μας</a></div>
+      </div>
+      <ul class="issues">
+        <li>Υπερωρίες που δεν πληρώνονται</li>
+        <li>Σάββατα και Κυριακές στο εργοτάξιο</li>
+        <li>Μισθοί που αργούν</li>
+        <li>«Μπλοκάκι» αντί για σύμβαση</li>
+        <li>Μέτρα ασφάλειας που λείπουν</li>
+      </ul>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,46 @@
+---
+// Το κόκκινο μπλοκ της αρχικής: ο αγώνας της στιγμής ή, αν έχει περάσει,
+// το νεότερο κείμενο του Σωματείου.
+import { agonas } from '../data/agonas';
+import { todayAthens, longDate } from '../lib/dates';
+import { u } from '../lib/url';
+import { allTexts, textHref } from '../lib/texts';
+
+const texts = await allTexts();
+const active = todayAthens() <= agonas.until;
+const text = texts.find((t) => t.id === agonas.text);
+const latest = texts[0];
+---
+{active ? (
+  <section class="strike" aria-labelledby="strike-title">
+    <div class="wrap">
+      <div class="strike-top">
+        <p class="kicker">{agonas.kicker}</p>
+        <p class="count" data-count={agonas.countTo}></p>
+      </div>
+      <h1 class="mega" id="strike-title">{agonas.title}</h1>
+      <p class="date-line">{agonas.dateLine}</p>
+      <div class="facts">
+        {agonas.facts.map((f) => <div><span class="lab">{f.label}</span><p>{f.text}</p></div>)}
+      </div>
+      {text && (
+        <div class="btn-row">
+          <a class="btn btn-paper" href={textHref(text)}>Διάβασε την ανακοίνωση</a>
+          {text.data.pdf && <a class="btn btn-line" href={u(text.data.pdf)} download>PDF για μοίρασμα</a>}
+        </div>
+      )}
+    </div>
+  </section>
+) : latest ? (
+  <section class="lead-block" aria-labelledby="lead-title">
+    <div class="wrap">
+      <span class="lab">{latest.data.kind} · {longDate(latest.data.date)}</span>
+      <h1 id="lead-title"><a href={textHref(latest)}>{latest.data.title}</a></h1>
+      {latest.data.summary && <p>{latest.data.summary}</p>}
+      <div class="btn-row">
+        <a class="btn btn-paper" href={textHref(latest)}>Διάβασε το κείμενο</a>
+        {latest.data.pdf && <a class="btn btn-line" href={u(latest.data.pdf)} download>PDF</a>}
+      </div>
+    </div>
+  </section>
+) : null}

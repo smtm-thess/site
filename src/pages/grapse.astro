@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import MailForm from '../components/MailForm.astro';
+import { UNION } from '../consts';
+---
+<Base title="Γράψε μας" description="Γράψε στο Σωματείο τι συμβαίνει στο γραφείο ή στο εργοτάξιο. Μαζί με τους συναδέλφους σου θα οργανώσουμε την απάντηση." active="grapse">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="lab">Γράψε μας</span>
+      <h1 class="ph">ΤΙ ΓΙΝΕΤΑΙ ΣΤΗ ΔΟΥΛΕΙΑ ΣΟΥ;</h1>
+      <p class="lead">Γράψε μας τι συμβαίνει στο γραφείο ή στο εργοτάξιο. Το Σωματείο θα σε βρει, και μαζί με τους συναδέλφους σου θα οργανώσουμε την απάντηση.</p>
+    </div>
+  </section>
+
+  <section class="band" aria-label="Φόρμα">
+    <div class="wrap split">
+      <div>
+        <ul class="issues">
+          <li>Υπερωρίες που δεν πληρώνονται</li>
+          <li>Σάββατα και Κυριακές στο εργοτάξιο</li>
+          <li>Μισθοί που αργούν</li>
+          <li>«Μπλοκάκι» αντί για σύμβαση</li>
+          <li>Μέτρα ασφάλειας που λείπουν</li>
+          <li>Απειλές για απολύσεις</li>
+        </ul>
+        <div class="safety">
+          <span class="lab">Πριν γράψεις</span>
+          <ul>
+            <li>Μη στέλνεις από υπολογιστή, Wi‑Fi ή email της δουλειάς.</li>
+            <li>Δεν χρειάζεται να γράψεις το όνομά σου στο μήνυμα.</li>
+            <li>Αν θες να τα πούμε από κοντά: {UNION.place}, {UNION.street}, ή στο <a class="tel" href={`tel:+30${UNION.phones[0].replace(/\s/g, '')}`}>{UNION.phones[0]}</a>.</li>
+          </ul>
+        </div>
+      </div>
+      <MailForm id="report-form" subject="Τι γίνεται στη δουλειά μου" button="Στείλε στο Σωματείο" buttonClass="btn-ink">
+        <div class="field"><label for="r-place">Πού δουλεύεις</label><input id="r-place" type="text" placeholder="Εταιρεία, γραφείο ή εργοτάξιο"></div>
+        <div class="field"><label for="r-what">Τι συμβαίνει</label><textarea id="r-what" placeholder="π.χ. Από τον Σεπτέμβρη μας κρατάνε ως τις 7 το απόγευμα και οι ώρες δεν πληρώνονται." data-required="Γράψε μας τι συμβαίνει."></textarea></div>
+        <div class="field"><label for="r-many">Πόσοι συνάδελφοι έχουν το ίδιο πρόβλημα</label><input id="r-many" type="text" placeholder="Προαιρετικό"><small>Μας βοηθά να δούμε πώς θα οργανωθούμε στον χώρο σας.</small></div>
+        <div class="field"><label for="r-contact">Πώς να σε βρούμε</label><input id="r-contact" type="text" placeholder="Τηλέφωνο, αν θες να σε πάρουμε"></div>
+      </MailForm>
+    </div>
+  </section>
+</Base>

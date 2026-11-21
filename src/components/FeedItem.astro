@@ -1,0 +1,24 @@
+---
+// Μία γραμμή στη λίστα των κειμένων
+import { u } from '../lib/url';
+import { dayNum, dayMonth, monthYear, isoDate } from '../lib/dates';
+import { textHref, type Text } from '../lib/texts';
+interface Props { t: Text; lead?: boolean; compact?: boolean; showSummary?: boolean }
+const { t, lead = false, compact = false, showSummary = true } = Astro.props;
+const href = textHref(t);
+const ext = !!t.data.external;
+---
+<li class:list={['item', { 'lead-item': lead }]} data-cat={t.data.cat} data-search={[t.data.summary ?? '', ...t.data.sub].join(' ')}>
+  <time datetime={isoDate(t.data.date)}>
+    <b>{compact ? dayMonth(t.data.date) : dayNum(t.data.date)}</b><span>{compact ? t.data.date.getUTCFullYear() : monthYear(t.data.date)}</span>
+  </time>
+  <div>
+    <span class="lab kind">{t.data.kind}</span>
+    <h3><a href={href} rel={ext ? 'noopener' : undefined}>{t.data.title}</a></h3>
+    {showSummary && t.data.summary && <p>{t.data.summary}</p>}
+  </div>
+  <div class="item-links">
+    <a class="chip" href={href} rel={ext ? 'noopener' : undefined} tabindex="-1" aria-hidden="true">ΚΕΙΜΕΝΟ</a>
+    {t.data.pdf && <a class="chip" href={u(t.data.pdf)} download aria-label={`PDF: ${t.data.title}`}>PDF</a>}
+  </div>
+</li>

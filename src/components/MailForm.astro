@@ -1,0 +1,51 @@
+---
+// Φόρμα χωρίς ενδιάμεσο: με το «Στείλε» ανοίγει το email του αποστολέα με το
+// μήνυμα έτοιμο προς το Σωματείο. Δεν περνά από καμία τρίτη υπηρεσία.
+import { UNION } from '../consts';
+interface Props { id: string; subject: string; button: string; buttonClass?: string }
+const { id, subject, button, buttonClass = 'btn-red' } = Astro.props;
+---
+<form id={id} class="mail-form" data-to={UNION.email} data-subject={subject} novalidate>
+  <slot />
+  <div class="form-foot">
+    <button class:list={['btn', buttonClass]} type="submit">{button}</button>
+    <p class="status" role="status" aria-live="polite"></p>
+  </div>
+  <p class="form-note">Με το «{button}» ανοίγει το email σου με το μήνυμα έτοιμο. Το στέλνεις εσύ, από το δικό σου email, όχι της δουλειάς.</p>
+  <div class="mail-alt" hidden>
+    <p><strong>Δεν άνοιξε το email;</strong> Αντίγραψε το μήνυμα και στείλ' το στο <a href={`mailto:${UNION.email}`}>{UNION.email}</a>, ή πάρε μας τηλέφωνο στο {UNION.phones.join(' ή ')}.</p>
+    <pre></pre>
+    <div class="btn-row"><button class="chip" type="button" data-copy="" data-copied="Το μήνυμα αντιγράφηκε">ΑΝΤΙΓΡΑΦΗ ΜΗΝΥΜΑΤΟΣ</button></div>
+  </div>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.mail-form').forEach((f) => {
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const status = f.querySelector('.status')!;
+      const required = [...f.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-required]')];
+      const missing = required.find((el) => !el.value.trim());
+      if (missing) {
+        status.textContent = missing.dataset.required || 'Συμπλήρωσε το πεδίο.';
+        missing.focus();
+        return;
+      }
+      const lines: string[] = [];
+      f.querySelectorAll<HTMLElement>('.field').forEach((fd) => {
+        const label = fd.querySelector('label')?.textContent?.trim();
+        const el = fd.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('input,textarea,select');
+        const v = el?.value.trim();
+        if (label && v) lines.push(el instanceof HTMLTextAreaElement ? `${label}:\n${v}` : `${label}: ${v}`);
+      });
+      const body = lines.join('\n\n');
+      const href = `mailto:${f.dataset.to}?subject=${encodeURIComponent(f.dataset.subject!)}&body=${encodeURIComponent(body)}`;
+      const alt = f.querySelector<HTMLElement>('.mail-alt')!;
+      alt.querySelector('pre')!.textContent = `Θέμα: ${f.dataset.subject}\n\n${body}`;
+      alt.querySelector<HTMLElement>('[data-copy]')!.dataset.copy = body;
+      status.textContent = 'Άνοιξε το email σου. Πάτα «Αποστολή» εκεί.';
+      window.location.href = href;
+      setTimeout(() => { alt.hidden = false; }, 1200);
+    });
+  });
+</script>

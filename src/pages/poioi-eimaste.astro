@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import { UNION } from '../consts';
+---
+<Base title="Ποιοι είμαστε" description="Το Σωματείο Μισθωτών Τεχνικών Μακεδονίας οργανώνει μηχανικούς, τεχνολόγους, γεωλόγους, σχεδιαστές και κάθε τεχνικό που δουλεύει για μισθό στη Μακεδονία." active="poioi">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="lab">Το Σωματείο</span>
+      <h1 class="ph">ΠΟΙΟΙ ΕΙΜΑΣΤΕ</h1>
+      <p class="lead">Το Σωματείο Μισθωτών Τεχνικών Μακεδονίας οργανώνει μηχανικούς, τεχνολόγους, γεωλόγους, σχεδιαστές και κάθε τεχνικό που δουλεύει για μισθό στη Μακεδονία, με σύμβαση ή με «μπλοκάκι».</p>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="believe-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="h2" id="believe-h">ΤΙ ΛΕΜΕ</h2></div>
+      <div class="beliefs">
+        <div><h3>Εμείς παράγουμε τον πλούτο</h3><p>Οι μελέτες, τα έργα και τα εργοστάσια στέκονται πάνω στη δική μας δουλειά. Τα κέρδη τα παίρνουν οι όμιλοι.</p></div>
+        <div><h3>Η δύναμή μας είναι η οργάνωση</h3><p>Ό,τι κερδίσαμε, το κερδίσαμε οργανωμένοι στους χώρους δουλειάς, όχι περιμένοντας την επόμενη κυβέρνηση.</p></div>
+        <div><h3>Δεν δουλεύουμε για τον πόλεμό τους</h3><p>Η επιστήμη και η δουλειά μας να χτίζουν σχολεία, νοσοκομεία, αντισεισμική και αντιπλημμυρική προστασία, όχι υποδομές για τον πόλεμο.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-2" aria-labelledby="decide-h">
+    <div class="wrap split">
+      <div>
+        <h2 class="h3" id="decide-h">ΠΩΣ ΑΠΟΦΑΣΙΖΟΥΜΕ</h2>
+        <div class="prose"><p>Ανώτατο όργανο είναι η <strong>Γενική Συνέλευση</strong> των μελών. Το Διοικητικό Συμβούλιο εκλέγεται από τα μέλη. Οι τελευταίες εκλογές έγιναν στις 6 με 9 Νοεμβρίου 2025.</p></div>
+      </div>
+      <div>
+        <h2 class="h3">ΜΕ ΠΟΙΟΥΣ ΠΑΛΕΥΟΥΜΕ</h2>
+        <div class="prose"><p>Δίνουμε τους αγώνες μας μαζί με το <strong>Συνδικάτο Οικοδόμων</strong>, το <strong>Σωματείο Μισθωτών Τεχνικών</strong> της Αθήνας και τα σωματεία της πόλης που παλεύουν με ταξικό προσανατολισμό.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="contact-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="h2" id="contact-h">ΕΠΙΚΟΙΝΩΝΙΑ</h2></div>
+      <div class="contact-grid">
+        <div><span class="lab">Έδρα</span><p>{UNION.place}</p><small>{UNION.street} · <a href={UNION.mapUrl} target="_blank" rel="noopener">στον χάρτη</a></small></div>
+        <div><span class="lab">Τηλέφωνα</span><p>{UNION.phones.map((p, i) => <>{i > 0 && <br />}<a class="tel" href={`tel:+30${p.replace(/\s/g, '')}`}>{p}</a></>)}</p></div>
+        <div><span class="lab">Email</span><p style="font-size:clamp(19px,2.2vw,26px);overflow-wrap:anywhere"><a href={`mailto:${UNION.email}`}>{UNION.email}</a></p><small><button class="copy" type="button" data-copy={UNION.email} data-copied="Το email αντιγράφηκε" style="margin:0">ΑΝΤΙΓΡΑΦΗ</button></small></div>
+      </div>
+    </div>
+  </section>
+</Base>

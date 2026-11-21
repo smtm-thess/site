@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { allTexts } from '../../lib/texts';
+import { CATS, UNION } from '../../consts';
+
+const texts = await allTexts();
+const years = [...new Set(texts.map((t) => t.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+const cats = Object.entries(CATS).filter(([k]) => texts.some((t) => t.data.cat === k));
+---
+<Base title="Ανακοινώσεις" description="Ανακοινώσεις, αποφάσεις, δελτία τύπου και ανταποκρίσεις του Σωματείου Μισθωτών Τεχνικών Μακεδονίας." active="anakoinoseis">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="lab">Κείμενα του Σωματείου</span>
+      <h1 class="ph">ΑΝΑΚΟΙΝΩΣΕΙΣ</h1>
+      <p class="lead">Ανακοινώσεις, αποφάσεις, δελτία τύπου και ανταποκρίσεις από τις δράσεις μας.</p>
+    </div>
+  </section>
+
+  <section aria-label="Αρχείο κειμένων">
+    <div class="wrap">
+      <div class="filters">
+        {cats.length > 1 && (
+          <div class="chips" role="group" aria-label="Είδος κειμένου" id="cat-chips">
+            <button class="chip" type="button" data-cat="all" aria-pressed="true">ΟΛΑ</button>
+            {cats.map(([k, label]) => <button class="chip" type="button" data-cat={k} aria-pressed="false">{label.toUpperCase()}</button>)}
+          </div>
+        )}
+        <div class="filter-row">
+          {years.length > 1 && (
+            <div class="field-inline">
+              <label for="f-year">Χρονιά</label>
+              <select id="f-year">
+                <option value="all">Όλες</option>
+                {years.map((y) => <option value={y}>{y}</option>)}
+              </select>
+            </div>
+          )}
+          <div class="field-inline">
+            <label for="f-q">Αναζήτηση</label>
+            <input id="f-q" type="search" placeholder="π.χ. απεργία, σύμβαση, METLEN">
+          </div>
+          <p class="result-count" id="result-count" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div id="archive">
+        {years.map((y) => (
+          <section class="year" data-year={y}>
+            <h2 class="year-h">{y}</h2>
+            <ol class="feed compact">
+              {texts.filter((t) => t.data.date.getUTCFullYear() === y).map((t) => <FeedItem t={t} compact showSummary={false} />)}
+            </ol>
+          </section>
+        ))}
+        <p class="empty" id="archive-empty" hidden>Δεν βρέθηκε κείμενο με αυτά τα φίλτρα.</p>
+      </div>
+
+      <div class="notice" style="margin-bottom:72px">
+        <span class="lab">2012–2025</span>
+        <p>Τα κείμενα των προηγούμενων χρόνων μεταφέρονται εδώ σιγά σιγά. Ως τότε βρίσκονται όλα στο <a href={UNION.oldSite} rel="noopener">παλιό site του Σωματείου</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Φίλτρα του αρχείου: είδος, χρονιά, αναζήτηση χωρίς τόνους
+  let cat = 'all';
+  const year = document.getElementById('f-year') as HTMLSelectElement | null;
+  const q = document.getElementById('f-q') as HTMLInputElement;
+  const count = document.getElementById('result-count')!;
+  const norm = (s: string) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  function filter() {
+    let n = 0;
+    const query = norm(q.value.trim());
+    document.querySelectorAll<HTMLElement>('#archive .year').forEach((sec) => {
+      const yOk = !year || year.value === 'all' || sec.dataset.year === year.value;
+      let shown = 0;
+      sec.querySelectorAll<HTMLElement>('.item').forEach((it) => {
+        const ok = yOk && (cat === 'all' || it.dataset.cat === cat) && (!query || norm((it.textContent || '') + ' ' + (it.dataset.search || '')).includes(query));
+        it.hidden = !ok;
+        if (ok) { shown++; n++; }
+      });
+      sec.hidden = shown === 0;
+    });
+    count.textContent = n === 1 ? '1 κείμενο' : `${n} κείμενα`;
+    document.getElementById('archive-empty')!.hidden = n > 0;
+  }
+  document.querySelectorAll<HTMLButtonElement>('#cat-chips button').forEach((b) => {
+    b.addEventListener('click', () => {
+      cat = b.dataset.cat!;
+      document.querySelectorAll('#cat-chips button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      filter();
+    });
+  });
+  year?.addEventListener('change', filter);
+  q.addEventListener('input', filter);
+  filter();
+</script>
