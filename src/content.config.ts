@@ -17,6 +17,10 @@ const anakoinoseis = defineCollection({
     event: z
       .object({ label: z.string(), when: z.string(), where: z.string() })
       .optional(),
+    // Βίντεο του κειμένου: αρχεία στο public/video/
+    video: z
+      .object({ src: z.string(), poster: z.string(), length: z.string().optional() })
+      .optional(),
     og: z.object({ title: z.string().optional(), line: z.string().optional() }).optional(),
     // Παλιά κείμενα που μένουν στο παλιό site: η λίστα δείχνει εκεί
     external: z.string().url().optional(),

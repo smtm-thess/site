@@ -26,6 +26,7 @@ const latest = texts[0];
       {text && (
         <div class="btn-row">
           <a class="btn btn-paper" href={textHref(text)}>Διάβασε την ανακοίνωση</a>
+          {text.data.video && <a class="btn btn-line" href={`${textHref(text)}#video`}>Το βίντεο</a>}
           {text.data.pdf && <a class="btn btn-line" href={u(text.data.pdf)} download>PDF για μοίρασμα</a>}
         </div>
       )}

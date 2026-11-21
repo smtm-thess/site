@@ -44,6 +44,7 @@ const description = d.summary ?? d.sub.join(' · ');
         <div class="side-box">
           <span class="lab">Μοίρασέ το</span>
           {d.pdf && <a class="btn btn-ink" href={u(d.pdf)} download>Κατέβασε το PDF</a>}
+          {d.video && <a class="btn btn-ghost" href="#video">Δες το βίντεο</a>}
           <div class="share">
             <a class="chip" href={`viber://forward?text=${enc(shareText)}`}>VIBER</a>
             <a class="chip" href={`https://wa.me/?text=${enc(shareText)}`} rel="noopener" target="_blank">WHATSAPP</a>
@@ -53,5 +54,22 @@ const description = d.summary ?? d.sub.join(' · ');
         </div>
       </aside>
     </div>
+    {d.video && (
+      <section class="video-band dark" id="video" aria-labelledby="video-h">
+        <div class="wrap">
+          <video class="vid" controls playsinline preload="none" poster={u(d.video.poster)} width="1080" height="1920">
+            <source src={u(d.video.src)} type="video/mp4">
+          </video>
+          <div>
+            <span class="lab">Βίντεο{d.video.length && ` · ${d.video.length}`}</span>
+            <h2 class="h2" id="video-h">ΣΤΕΙΛ' ΤΟ ΣΤΟΥΣ ΣΥΝΑΔΕΛΦΟΥΣ</h2>
+            <p class="lead">Κατέβασέ το και μοίρασέ το στο Viber, στα social, στην ομάδα της δουλειάς. Είναι κάθετο, έτοιμο για story και reels.</p>
+            <div class="btn-row">
+              <a class="btn btn-red" href={u(d.video.src)} download>Κατέβασε το βίντεο</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
   </article>
 </Base>
