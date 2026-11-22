@@ -4,8 +4,8 @@
 Παράδειγμα:
   python3 tools/email.py src/content/anakoinoseis/2026-11-16-apergoume-25-noemvri.md > email.html
 
-Στο Sender: νέα καμπάνια, σχέδιο με δικό σας HTML, επικόλληση. Στη θέση του
-{{UNSUBSCRIBE}} μπαίνει ο σύνδεσμος διαγραφής του Sender.
+Στο Sender: Email campaigns, New campaign, Design, Custom HTML email, επικόλληση.
+Το {{unsubscribe_link}} είναι η ετικέτα του Sender για τον σύνδεσμο διαγραφής (υποχρεωτική).
 Το email έχει την αρχή του κειμένου και κουμπί για όλη την ανακοίνωση στο site.
 Επιλογές: --site https://smtm.gr  --paras 3 (πόσες παράγραφοι της αρχής)
           --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
@@ -73,7 +73,7 @@ if a.note:
 {title}<div style="font:15px/1.55 {TEXT};color:#2A2723">{a.note.replace('<strong>', f'<strong style="color:{INK}">')}</div>
 </td></tr></table></td></tr>'''
 
-out = f'''<!doctype html>
+out = f'''<!DOCTYPE html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(d['title'])}</title></head>
 <body style="margin:0;padding:0;background:{PAPER2}">
@@ -105,7 +105,7 @@ out = f'''<!doctype html>
 <strong style="color:{INK}">Σωματείο Μισθωτών Τεχνικών Μακεδονίας</strong><br>
 Εργατικό Κέντρο Θεσσαλονίκης, Αριστοτέλους 32, 5ος όροφος, Θεσσαλονίκη<br>
 <a href="{site}/{REF}" style="color:{GREY}">{site.replace('https://', '')}</a> · <a href="mailto:info@smtm.gr" style="color:{GREY}">info@smtm.gr</a> · 694 834 9644 · 697 459 2442<br><br>
-Το λαμβάνεις γιατί είσαι μέλος ή φίλος του Σωματείου. <a href="{{{{UNSUBSCRIBE}}}}" style="color:{GREY}">Δεν θέλω άλλα email</a>
+Το λαμβάνεις γιατί είσαι μέλος ή φίλος του Σωματείου. <a href="{{{{unsubscribe_link}}}}" style="color:{GREY}">Δεν θέλω άλλα email</a>
 </td></tr>
 </table></td></tr></table>
 </body></html>
