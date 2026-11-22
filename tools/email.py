@@ -9,6 +9,7 @@
 Το email έχει την αρχή του κειμένου και κουμπί για όλη την ανακοίνωση στο site.
 Επιλογές: --site https://smtm.gr  --paras 3 (πόσες παράγραφοι της αρχής)
           --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
+Αν υπάρχει public/email/<slug>-video.jpg (tools/video_thumb.py), το βίντεο μπαίνει ως εικόνα με ▶.
 Οι σύνδεσμοι προς το site έχουν ?ref=email, για να μετράει το GoatCounter από πού ήρθαν.
 """
 import argparse, html, os, re, sys, unicodedata
@@ -69,7 +70,26 @@ subs = ''.join(f'<div style="font:bold 17px/1.25 {DISPLAY};color:{INK if i else 
                for i, s in enumerate(d.get('sub') or []))
 pdf_link = (f'<p style="margin:14px 0 0;font:14px/1.5 {TEXT}"><a href="{esc(pdf)}" style="color:{INK};font-weight:bold">Κατέβασε το PDF για μοίρασμα</a></p>'
             if pdf else '')
-if d.get('video'):
+video = ''
+thumb = f'public/email/{slug}-video.jpg'
+if d.get('video') and os.path.exists(thumb):
+    # Εικόνα με ▶ που ανοίγει το βίντεο στο site (τα email δεν παίζουν βίντεο).
+    # Τη φτιάχνει το tools/video_thumb.py από τρία καρέ του βίντεο.
+    import subprocess
+    dur = ''
+    try:
+        sec = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0',
+                                    'public' + (d['video']['src'] if isinstance(d['video'], dict) else d['video'])],
+                                   capture_output=True, text=True).stdout)
+        dur = f' · {int(sec // 60)}:{int(round(sec % 60)):02d}'
+    except Exception:
+        pass
+    vurl = esc(url + REF) + '#video'
+    video = f'''<tr><td style="padding:16px 32px 4px">
+<a href="{vurl}" style="text-decoration:none"><img src="{site}/email/{slug}-video.jpg" width="536" alt="▶ Δες το βίντεο της απεργίας" style="display:block;width:100%;max-width:536px;height:auto;border:0"></a>
+<p style="margin:10px 0 0;font:bold 15px/1.4 {TEXT}"><a href="{vurl}" style="color:{INK}">▶ Δες το βίντεο της απεργίας{dur}</a></p>
+</td></tr>'''
+elif d.get('video'):
     pdf_link = (f'<p style="margin:14px 0 0;font:14px/1.5 {TEXT}"><a href="{esc(url + REF)}#video" style="color:{INK};font-weight:bold">Δες το βίντεο της απεργίας</a></p>'
                 + pdf_link.replace('margin:14px', 'margin:6px'))
 
@@ -101,6 +121,7 @@ out = f'''<!DOCTYPE html>
 {''.join(para(p) for p in excerpt)}
 </td></tr>
 {event}
+{video}
 <tr><td style="padding:16px 32px 32px">
 <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:{RED}">
 <a href="{esc(url + REF)}" style="display:inline-block;padding:14px 22px;font:bold 16px/1.2 {TEXT};color:{PAPER};text-decoration:none">Διάβασε όλη την ανακοίνωση</a>
