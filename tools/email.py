@@ -8,6 +8,8 @@
 {{UNSUBSCRIBE}} μπαίνει ο σύνδεσμος διαγραφής του Sender.
 Το email έχει την αρχή του κειμένου και κουμπί για όλη την ανακοίνωση στο site.
 Επιλογές: --site https://smtm.gr  --paras 3 (πόσες παράγραφοι της αρχής)
+          --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
+Οι σύνδεσμοι προς το site έχουν ?ref=email, για να μετράει το GoatCounter από πού ήρθαν.
 """
 import argparse, html, os, re, sys
 import yaml
@@ -16,6 +18,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument('md')
 ap.add_argument('--site', default='https://smtm.gr')
 ap.add_argument('--paras', type=int, default=3)
+ap.add_argument('--note-title', default='')
+ap.add_argument('--note', default='')
 a = ap.parse_args()
 
 src = open(a.md, encoding='utf-8').read()
@@ -24,6 +28,7 @@ d = yaml.safe_load(fm)
 slug = os.path.splitext(os.path.basename(a.md))[0]
 site = a.site.rstrip('/')
 url = f'{site}/anakoinoseis/{slug}/'
+REF = '?ref=email'
 pdf = site + d['pdf'] if d.get('pdf') else ''
 
 # Η αρχή του κειμένου: οι πρώτες παράγραφοι, χωρίς την προσφώνηση
@@ -57,6 +62,16 @@ subs = ''.join(f'<div style="font:bold 17px/1.25 {DISPLAY};color:{INK if i else 
                for i, s in enumerate(d.get('sub') or []))
 pdf_link = (f'<p style="margin:14px 0 0;font:14px/1.5 {TEXT}"><a href="{esc(pdf)}" style="color:{INK};font-weight:bold">Κατέβασε το PDF για μοίρασμα</a></p>'
             if pdf else '')
+if d.get('video'):
+    pdf_link = (f'<p style="margin:14px 0 0;font:14px/1.5 {TEXT}"><a href="{esc(url + REF)}#video" style="color:{INK};font-weight:bold">Δες το βίντεο της απεργίας</a></p>'
+                + pdf_link.replace('margin:14px', 'margin:6px'))
+
+note = ''
+if a.note:
+    title = f'<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:{RED};text-transform:uppercase;margin-bottom:8px">{esc(a.note_title)}</div>' if a.note_title else ''
+    note = f'''<tr><td style="padding:0 32px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:{PAPER2};border-left:4px solid {RED};padding:16px 20px">
+{title}<div style="font:15px/1.55 {TEXT};color:#2A2723">{a.note.replace('<strong>', f'<strong style="color:{INK}">')}</div>
+</td></tr></table></td></tr>'''
 
 out = f'''<!doctype html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -81,14 +96,15 @@ out = f'''<!doctype html>
 {event}
 <tr><td style="padding:16px 32px 32px">
 <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:{RED}">
-<a href="{esc(url)}" style="display:inline-block;padding:14px 22px;font:bold 16px/1.2 {TEXT};color:{PAPER};text-decoration:none">Διάβασε όλη την ανακοίνωση</a>
+<a href="{esc(url + REF)}" style="display:inline-block;padding:14px 22px;font:bold 16px/1.2 {TEXT};color:{PAPER};text-decoration:none">Διάβασε όλη την ανακοίνωση</a>
 </td></tr></table>
 {pdf_link}
 </td></tr>
+{note}
 <tr><td style="padding:20px 32px 26px;border-top:2px solid {INK};font:13px/1.6 {TEXT};color:{GREY}">
 <strong style="color:{INK}">Σωματείο Μισθωτών Τεχνικών Μακεδονίας</strong><br>
 Εργατικό Κέντρο Θεσσαλονίκης, Αριστοτέλους 32, 5ος όροφος, Θεσσαλονίκη<br>
-<a href="{site}/" style="color:{GREY}">{site.replace('https://', '')}</a> · <a href="mailto:info@smtm.gr" style="color:{GREY}">info@smtm.gr</a> · 694 834 9644 · 697 459 2442<br><br>
+<a href="{site}/{REF}" style="color:{GREY}">{site.replace('https://', '')}</a> · <a href="mailto:info@smtm.gr" style="color:{GREY}">info@smtm.gr</a> · 694 834 9644 · 697 459 2442<br><br>
 Το λαμβάνεις γιατί είσαι μέλος ή φίλος του Σωματείου. <a href="{{{{UNSUBSCRIBE}}}}" style="color:{GREY}">Δεν θέλω άλλα email</a>
 </td></tr>
 </table></td></tr></table>
