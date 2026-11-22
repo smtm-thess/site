@@ -11,7 +11,7 @@
           --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
 Οι σύνδεσμοι προς το site έχουν ?ref=email, για να μετράει το GoatCounter από πού ήρθαν.
 """
-import argparse, html, os, re, sys
+import argparse, html, os, re, sys, unicodedata
 import yaml
 
 ap = argparse.ArgumentParser()
@@ -45,6 +45,13 @@ dt = d['date']
 date = f'{dt.day} {MONTHS[dt.month - 1]} {dt.year}'
 esc = lambda s: html.escape(str(s), quote=True)
 
+def caps(s):
+    # Κεφαλαία χωρίς τόνους, γραμμένα στο ίδιο το κείμενο: το Gmail αγνοεί τη γλώσσα της
+    # σελίδας, και με text-transform θα έβγαζε «ΑΝΑΚΟΊΝΩΣΗ».
+    s = unicodedata.normalize('NFD', str(s))
+    s = ''.join(c for c in s if c not in '\u0301\u0300\u0342')
+    return unicodedata.normalize('NFC', s).upper()
+
 def para(p):
     p = p.replace('<strong>', f'<strong style="color:{INK}">')
     return f'<p style="margin:0 0 16px;font:16px/1.6 {TEXT};color:#2A2723">{p}</p>'
@@ -53,7 +60,7 @@ event = ''
 if d.get('event'):
     e = d['event']
     event = f'''<tr><td style="padding:0 32px 8px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:{INK};padding:18px 20px">
-<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:#F3A69F;text-transform:uppercase">{esc(e['label'])}</div>
+<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:#F3A69F;text-transform:uppercase">{esc(caps(e['label']))}</div>
 <div style="font:bold 26px/1.1 {DISPLAY};color:{PAPER};margin-top:6px">{esc(e['when'])}</div>
 <div style="font:bold 17px/1.3 {DISPLAY};color:{PAPER};margin-top:6px">{esc(e['where'])}</div>
 </td></tr></table></td></tr>'''
@@ -68,7 +75,7 @@ if d.get('video'):
 
 note = ''
 if a.note:
-    title = f'<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:{RED};text-transform:uppercase;margin-bottom:8px">{esc(a.note_title)}</div>' if a.note_title else ''
+    title = f'<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:{RED};text-transform:uppercase;margin-bottom:8px">{esc(caps(a.note_title))}</div>' if a.note_title else ''
     note = f'''<tr><td style="padding:0 32px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:{PAPER2};border-left:4px solid {RED};padding:16px 20px">
 {title}<div style="font:15px/1.55 {TEXT};color:#2A2723">{a.note.replace('<strong>', f'<strong style="color:{INK}">')}</div>
 </td></tr></table></td></tr>'''
@@ -86,7 +93,7 @@ out = f'''<!DOCTYPE html>
 <td style="font:bold 12px/1.35 {TEXT};letter-spacing:1px;color:{INK}">ΣΩΜΑΤΕΙΟ ΜΙΣΘΩΤΩΝ<br>ΤΕΧΝΙΚΩΝ ΜΑΚΕΔΟΝΙΑΣ</td>
 </tr></table></td></tr>
 <tr><td style="background:{RED};padding:26px 32px 28px">
-<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:{INK};text-transform:uppercase">{esc(d.get('kind', 'Ανακοίνωση'))} · {esc(date)}</div>
+<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:{INK};text-transform:uppercase">{esc(caps(d.get('kind', 'Ανακοίνωση')))} · {esc(caps(date))}</div>
 <h1 style="margin:10px 0 4px;font:bold 38px/1.0 {DISPLAY};color:{PAPER}">{esc(d['title'])}</h1>
 {subs}
 </td></tr>
