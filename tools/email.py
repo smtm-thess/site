@@ -88,7 +88,7 @@ out = f'''<!doctype html>
 <tr><td style="padding:20px 32px 26px;border-top:2px solid {INK};font:13px/1.6 {TEXT};color:{GREY}">
 <strong style="color:{INK}">Σωματείο Μισθωτών Τεχνικών Μακεδονίας</strong><br>
 Εργατικό Κέντρο Θεσσαλονίκης, Αριστοτέλους 32, 5ος όροφος, Θεσσαλονίκη<br>
-<a href="{site}/" style="color:{GREY}">{site.replace('https://', '')}</a> · 694 834 9644 · 697 459 2442<br><br>
+<a href="{site}/" style="color:{GREY}">{site.replace('https://', '')}</a> · <a href="mailto:info@smtm.gr" style="color:{GREY}">info@smtm.gr</a> · 694 834 9644 · 697 459 2442<br><br>
 Το λαμβάνεις γιατί είσαι μέλος ή φίλος του Σωματείου. <a href="{{{{UNSUBSCRIBE}}}}" style="color:{GREY}">Δεν θέλω άλλα email</a>
 </td></tr>
 </table></td></tr></table>
