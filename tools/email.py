@@ -8,6 +8,7 @@
 Το {{unsubscribe_link}} είναι η ετικέτα του Sender για τον σύνδεσμο διαγραφής (υποχρεωτική).
 Το email έχει την αρχή του κειμένου και κουμπί για όλη την ανακοίνωση στο site.
 Επιλογές: --site https://smtm.gr  --paras 3 (πόσες παράγραφοι της αρχής)
+          --slug <ανακοίνωση>: για email που δεν είναι σελίδα του site (υπενθύμιση), δείχνει σε αυτή την ανακοίνωση
           --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
 Αν υπάρχει public/email/<slug>-video.jpg (tools/video_thumb.py), το βίντεο μπαίνει ως εικόνα με ▶.
 Οι σύνδεσμοι προς το site έχουν ?ref=email, για να μετράει το GoatCounter από πού ήρθαν.
@@ -21,12 +22,13 @@ ap.add_argument('--site', default='https://smtm.gr')
 ap.add_argument('--paras', type=int, default=3)
 ap.add_argument('--note-title', default='')
 ap.add_argument('--note', default='')
+ap.add_argument('--slug', default='', help='σελίδα του site για κουμπί και εικόνα βίντεο, αν το .md δεν είναι ανακοίνωση του site (π.χ. υπενθύμιση)')
 a = ap.parse_args()
 
 src = open(a.md, encoding='utf-8').read()
 _, fm, body = src.split('---', 2)
 d = yaml.safe_load(fm)
-slug = os.path.splitext(os.path.basename(a.md))[0]
+slug = a.slug or os.path.splitext(os.path.basename(a.md))[0]
 site = a.site.rstrip('/')
 url = f'{site}/anakoinoseis/{slug}/'
 REF = '?ref=email'
