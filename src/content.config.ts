@@ -28,6 +28,9 @@ const anakoinoseis = defineCollection({
     // Ποια φωτογραφία μπαίνει στην κορυφή της αρχικής (από 0). Χρήσιμο όταν η πρώτη
     // είναι γραφικό με γράμματα (εξώφυλλο), που κόβεται άσχημα στο πλαίσιο της αρχικής.
     homePhoto: z.number().int().min(0).default(0),
+    // Εικόνα για όταν μοιράζεται ο σύνδεσμος (Viber, Facebook), 1200×630. Αν λείπει,
+    // κόβεται η πρώτη φωτογραφία.
+    share: image().optional(),
     // Παλιά κείμενα που μένουν στο παλιό site: η λίστα δείχνει εκεί
     external: z.string().url().optional(),
     draft: z.boolean().default(false),

@@ -36,23 +36,34 @@ const photo = t?.data.photos[t.data.homePhoto] ?? t?.data.photos[0];
       )}
     </div>
   </section>
+) : t && photo ? (
+  <section class="photo-hero" aria-labelledby="lead-title">
+    <a class="ph-img" href={textHref(t)} tabindex="-1" aria-hidden="true">
+      <Picture src={photo.src} alt="" widths={[640, 960, 1400, 2000]} sizes="100vw" formats={['avif', 'webp']} loading="eager" fetchpriority="high" />
+    </a>
+    <div class="wrap ph-text">
+      <span class="lab"><b>{t.data.kind}</b>{longDate(t.data.date)}</span>
+      <h1 id="lead-title"><a href={textHref(t)}>{t.data.title}</a></h1>
+      {t.data.summary && <p>{t.data.summary}</p>}
+      <div class="btn-row">
+        <a class="btn btn-red" href={textHref(t)}>{t.data.photos.length > 1 ? 'Το κείμενο και οι φωτογραφίες' : 'Διάβασε το κείμενο'}</a>
+        {t.data.video && <a class="btn btn-line" href={`${textHref(t)}#video`}>Δες το βίντεο</a>}
+        {t.data.pdf && <a class="btn btn-line" href={u(t.data.pdf)} download>PDF</a>}
+      </div>
+    </div>
+  </section>
 ) : t ? (
-  <section class:list={['lead-block', { 'has-photo': photo }]} aria-labelledby="lead-title">
+  <section class="lead-block" aria-labelledby="lead-title">
     <div class="wrap">
       <div class="lead-text">
         <span class="lab">{t.data.kind} · {longDate(t.data.date)}</span>
         <h1 id="lead-title"><a href={textHref(t)}>{t.data.title}</a></h1>
         {t.data.summary && <p>{t.data.summary}</p>}
         <div class="btn-row">
-          <a class="btn btn-paper" href={textHref(t)}>{t.data.photos.length > 1 ? 'Το κείμενο και οι φωτογραφίες' : 'Διάβασε το κείμενο'}</a>
+          <a class="btn btn-paper" href={textHref(t)}>Διάβασε το κείμενο</a>
           {t.data.pdf && <a class="btn btn-line" href={u(t.data.pdf)} download>PDF</a>}
         </div>
       </div>
-      {photo && (
-        <a class="lead-photo" href={textHref(t)} tabindex="-1" aria-hidden="true">
-          <Picture src={photo.src} alt="" widths={[480, 760, 1100, 1500]} sizes="(max-width: 900px) calc(100vw - 32px), 560px" formats={['avif', 'webp']} loading="eager" />
-        </a>
-      )}
     </div>
   </section>
 ) : (

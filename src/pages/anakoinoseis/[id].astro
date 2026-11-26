@@ -20,10 +20,11 @@ const enc = encodeURIComponent;
 const minutes = readingMinutes(t.body);
 const description = d.summary ?? d.sub.join(' · ');
 // Φωτογραφίες: η πρώτη πάνω από το κείμενο, οι άλλες από κάτω. Κάθε μία ανοίγει
-// σε μεγάλο μέγεθος. Η πρώτη γίνεται και η εικόνα κοινοποίησης.
+// σε μεγάλο μέγεθος. Η πρώτη γίνεται και η εικόνα κοινοποίησης, αν δεν υπάρχει share.
 const photos = d.photos;
 const big = await Promise.all(photos.map((p) => getImage({ src: p.src, width: Math.min(2000, p.src.width), format: 'jpg' })));
-const share = photos[0] && (await getImage({ src: photos[0].src, width: 1200, height: 630, fit: 'cover', format: 'jpg' }));
+const shareSrc = d.share ?? photos[0]?.src;
+const share = shareSrc && (await getImage({ src: shareSrc, width: 1200, height: 630, fit: 'cover', format: 'jpg' }));
 ---
 <Base title={d.title} description={description} image={share ? share.src : ogHref(t)} type="article" active="anakoinoseis" published={d.date}>
   <article>
