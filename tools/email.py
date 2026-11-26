@@ -7,7 +7,7 @@
 Στο Sender: Email campaigns, New campaign, Design, Custom HTML email, επικόλληση.
 Το {{unsubscribe_link}} είναι η ετικέτα του Sender για τον σύνδεσμο διαγραφής (υποχρεωτική).
 Το email έχει την αρχή του κειμένου και κουμπί για όλη την ανακοίνωση στο site.
-Επιλογές: --site https://smtm.gr  --paras 3 (πόσες παράγραφοι της αρχής)
+Επιλογές: --site https://smtm.gr  --paras 3 (πόσες παράγραφοι της αρχής) ή --paras 1,3,6,7 (ποιες)
           --slug <ανακοίνωση>: για email που δεν είναι σελίδα του site (υπενθύμιση), δείχνει σε αυτή την ανακοίνωση
           --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
 Αν υπάρχει public/email/<slug>-video.jpg (tools/video_thumb.py), το βίντεο μπαίνει ως εικόνα με ▶.
@@ -21,7 +21,7 @@ import yaml
 ap = argparse.ArgumentParser()
 ap.add_argument('md')
 ap.add_argument('--site', default='https://smtm.gr')
-ap.add_argument('--paras', type=int, default=3)
+ap.add_argument('--paras', default='3', help='πόσες παράγραφοι της αρχής (3) ή ποιες (1,3,6,7)')
 ap.add_argument('--note-title', default='')
 ap.add_argument('--note', default='')
 ap.add_argument('--button', default='', help='κείμενο του κουμπιού για το site')
@@ -40,7 +40,7 @@ pdf = site + d['pdf'] if d.get('pdf') else ''
 # Η αρχή του κειμένου: οι πρώτες παράγραφοι, χωρίς την προσφώνηση
 paras = [p for p in re.findall(r'<p>(.*?)</p>', body, flags=re.S)]
 paras = [p for p in paras if not re.match(r'^Συναδέλφισσες, συνάδελφοι,?$', re.sub(r'<[^>]+>', '', p).strip())]
-excerpt = paras[: a.paras]
+excerpt = [paras[int(i) - 1] for i in a.paras.split(',')] if ',' in a.paras else paras[: int(a.paras)]
 
 RED, INK, PAPER, PAPER2, GREY = '#CC2A1E', '#151515', '#F1ECE2', '#E7DFD0', '#56514A'
 DISPLAY = "'Arial Narrow','Roboto Condensed',Arial,Helvetica,sans-serif"
