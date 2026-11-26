@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { LINKS } from './src/data/links.ts';
 
 // Η διεύθυνση του site. Στο GitHub Pages τη δίνει το workflow
 // (SITE_URL και BASE_PATH από το actions/configure-pages). Όταν μπει το
@@ -13,6 +14,7 @@ export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  // οι σύντομοι σύνδεσμοι (src/data/links.ts) δεν μπαίνουν στο sitemap
+  integrations: [sitemap({ filter: (p) => !Object.keys(LINKS).some((l) => p.endsWith(`/${l}/`)) })],
   devToolbar: { enabled: false },
 });

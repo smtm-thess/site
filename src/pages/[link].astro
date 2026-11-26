@@ -1,0 +1,46 @@
+---
+// Σύντομος σύνδεσμος (src/data/links.ts): κάρτα προεπισκόπησης όπως του κειμένου και μεταφορά σε αυτό.
+import { getImage } from 'astro:assets';
+import { LINKS } from '../data/links';
+import { allTexts, ogHref, type Text } from '../lib/texts';
+import { abs } from '../lib/url';
+import { UNION } from '../consts';
+
+export async function getStaticPaths() {
+  const texts = await allTexts();
+  return Object.entries(LINKS).map(([link, id]) => ({ params: { link }, props: { t: texts.find((t) => t.id === id)!, link } }));
+}
+const { t, link } = Astro.props as { t: Text; link: string };
+const d = t.data;
+const target = abs(`/anakoinoseis/${t.id}/`, Astro.site);
+const go = `${target}?ref=${link}`;
+const src = d.share ?? d.photos[0]?.src;
+const img = src ? abs((await getImage({ src, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, Astro.site) : abs(ogHref(t), Astro.site);
+const description = d.summary ?? d.sub.join(' · ');
+---
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{d.title} | {UNION.short}</title>
+<meta name="description" content={description}>
+<meta name="robots" content="noindex">
+<link rel="canonical" href={target}>
+<meta property="og:site_name" content={UNION.name}>
+<meta property="og:locale" content="el_GR">
+<meta property="og:type" content="article">
+<meta property="og:title" content={d.title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={target}>
+<meta property="og:image" content={img}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta http-equiv="refresh" content={`0; url=${go}`}>
+<script is:inline define:vars={{ go }}>location.replace(go);</script>
+</head>
+<body style="font-family:system-ui,sans-serif;background:#F1ECE2;color:#151515;padding:24px">
+<p><a href={go}>{d.title}</a></p>
+</body>
+</html>
