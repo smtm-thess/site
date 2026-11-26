@@ -13,7 +13,7 @@ interface Props { h: Hero }
 const { h } = Astro.props;
 const call = (await allTexts()).find((t) => t.id === agonas.text);
 const t = h.mode === 'text' ? h.text : undefined;
-const photo = t?.data.photos[0];
+const photo = t?.data.photos[t.data.homePhoto] ?? t?.data.photos[0];
 ---
 {h.mode === 'agonas' ? (
   <section class="strike" aria-labelledby="strike-title">

@@ -68,7 +68,7 @@ const share = photos[0] && (await getImage({ src: photos[0].src, width: 1200, he
         <h2 class="lab" id="photos-h">Φωτογραφίες</h2>
         <div class="rep-grid">
           {photos.slice(1).map((p, i) => (
-            <a href={big[i + 1].src}><Picture src={p.src} alt={p.alt} widths={[400, 700, 1000, 1400]} sizes="(max-width: 620px) calc(100vw - 32px), (max-width: 1280px) 50vw, 580px" formats={['avif', 'webp']} /></a>
+            <figure><a href={big[i + 1].src}><Picture src={p.src} alt={p.alt} widths={[400, 700, 1000, 1400]} sizes="(max-width: 620px) calc(100vw - 32px), (max-width: 1280px) 50vw, 580px" formats={['avif', 'webp']} /></a><figcaption aria-hidden="true">{p.alt}</figcaption></figure>
           ))}
         </div>
       </section>

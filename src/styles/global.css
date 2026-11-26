@@ -327,6 +327,8 @@ form{display:grid;gap:22px;align-content:start}
 .rep-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .rep-grid img{aspect-ratio:4/3;object-fit:cover;background:var(--paper-2)}
 .rep-grid a{display:block}
+.rep-grid figure{margin:0}
+.rep-grid figcaption{margin-top:8px;font-size:14.5px;line-height:1.4;color:var(--ink-2)}
 .viber-row{margin-top:10px}
 /* καταστατικό */
 .kat-grid{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);gap:40px 72px;padding-block:40px 90px;align-items:start}
