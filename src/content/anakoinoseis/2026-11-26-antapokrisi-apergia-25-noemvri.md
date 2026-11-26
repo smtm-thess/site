@@ -5,6 +5,10 @@ sub:
 date: 2026-11-26
 kind: "Ανταπόκριση"
 cat: drasi
+video:
+  src: "/video/2026-11-26-antapokrisi.mp4"
+  poster: "/video/2026-11-26-antapokrisi.jpg"
+  length: "0:48"
 share: ./foto/2026-11-26-antapokrisi-apergia-25-noemvri/share.jpg
 summary: "Από το πρωί στους χώρους δουλειάς ως τη μεγάλη διαδήλωση στη Θεσσαλονίκη, πλάι στους οικοδόμους. Ο αγώνας για Κλαδική Συλλογική Σύμβαση συνεχίζεται."
 photos:

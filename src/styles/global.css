@@ -340,6 +340,9 @@ form{display:grid;gap:22px;align-content:start}
 .rep-grid a{display:block}
 .rep-grid figure{margin:0}
 .rep-grid figcaption{margin-top:8px;font-size:14.5px;line-height:1.4;color:var(--ink-2)}
+/* μονός αριθμός φωτογραφιών: η τελευταία πιάνει όλο το πλάτος */
+.rep-grid figure:last-child:nth-child(odd){grid-column:1 / -1}
+.rep-grid figure:last-child:nth-child(odd) img{aspect-ratio:16/9}
 .viber-row{margin-top:10px}
 /* καταστατικό */
 .kat-grid{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);gap:40px 72px;padding-block:40px 90px;align-items:start}

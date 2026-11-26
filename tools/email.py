@@ -11,6 +11,8 @@
           --slug <ανακοίνωση>: για email που δεν είναι σελίδα του site (υπενθύμιση), δείχνει σε αυτή την ανακοίνωση
           --note-title «Νέο site, νέο email» --note «κείμενο (επιτρέπεται <strong>)»: πλαίσιο πριν το υποσέλιδο
 Αν υπάρχει public/email/<slug>-video.jpg (tools/video_thumb.py), το βίντεο μπαίνει ως εικόνα με ▶.
+Αν υπάρχει public/email/<slug>-photo.jpg (π.χ. 1200 pixel πλάτος), μπαίνει μεγάλη κάτω από τον τίτλο.
+          --button «Όλη η ανταπόκριση και οι φωτογραφίες»: το κείμενο του κουμπιού
 Οι σύνδεσμοι προς το site έχουν ?ref=email, για να μετράει το GoatCounter από πού ήρθαν.
 """
 import argparse, html, os, re, sys, unicodedata
@@ -22,6 +24,7 @@ ap.add_argument('--site', default='https://smtm.gr')
 ap.add_argument('--paras', type=int, default=3)
 ap.add_argument('--note-title', default='')
 ap.add_argument('--note', default='')
+ap.add_argument('--button', default='', help='κείμενο του κουμπιού για το site')
 ap.add_argument('--slug', default='', help='σελίδα του site για κουμπί και εικόνα βίντεο, αν το .md δεν είναι ανακοίνωση του site (π.χ. υπενθύμιση)')
 a = ap.parse_args()
 
@@ -95,6 +98,12 @@ elif d.get('video'):
     pdf_link = (f'<p style="margin:14px 0 0;font:14px/1.5 {TEXT}"><a href="{esc(url + REF)}#video" style="color:{INK};font-weight:bold">Δες το βίντεο της απεργίας</a></p>'
                 + pdf_link.replace('margin:14px', 'margin:6px'))
 
+photo = ''
+if os.path.exists(f'public/email/{slug}-photo.jpg'):
+    # Μεγάλη φωτογραφία κάτω από τον τίτλο, που ανοίγει την ανακοίνωση στο site
+    photo = f'''<tr><td style="padding:0"><a href="{esc(url + REF)}" style="text-decoration:none"><img src="{site}/email/{slug}-photo.jpg" width="600" alt="{esc((d.get('photos') or [{}])[0].get('alt', ''))}" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a></td></tr>'''
+button = a.button or ('Όλη η ανταπόκριση και οι φωτογραφίες' if len(d.get('photos') or []) > 1 else 'Διάβασε όλη την ανακοίνωση')
+
 note = ''
 if a.note:
     title = f'<div style="font:bold 11px/1.4 {TEXT};letter-spacing:2px;color:{RED};text-transform:uppercase;margin-bottom:8px">{esc(caps(a.note_title))}</div>' if a.note_title else ''
@@ -119,6 +128,7 @@ out = f'''<!DOCTYPE html>
 <h1 style="margin:10px 0 4px;font:bold 38px/1.0 {DISPLAY};color:{PAPER}">{esc(d['title'])}</h1>
 {subs}
 </td></tr>
+{photo}
 <tr><td style="padding:28px 32px 6px">
 {''.join(para(p) for p in excerpt)}
 </td></tr>
@@ -126,7 +136,7 @@ out = f'''<!DOCTYPE html>
 {video}
 <tr><td style="padding:16px 32px 32px">
 <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:{RED}">
-<a href="{esc(url + REF)}" style="display:inline-block;padding:14px 22px;font:bold 16px/1.2 {TEXT};color:{PAPER};text-decoration:none">Διάβασε όλη την ανακοίνωση</a>
+<a href="{esc(url + REF)}" style="display:inline-block;padding:14px 22px;font:bold 16px/1.2 {TEXT};color:{PAPER};text-decoration:none">{esc(button)}</a>
 </td></tr></table>
 {pdf_link}
 </td></tr>
